@@ -1,0 +1,12 @@
+[project]
+name = "surfaccounting-mcp-server"
+version = "0.1.0"
+description = "Model Context Protocol (MCP) server for Surf"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "fastmcp>=3.1.0",
+    "flask-sqlalchemy>=3.1.1",
+    "sqlalchemy>=2.0.47",
+]
