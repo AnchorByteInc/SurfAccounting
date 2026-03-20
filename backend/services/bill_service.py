@@ -45,6 +45,7 @@ def post_bill(bill_id):
     # 3.4.3 Update vendor A/P balance
     update_vendor_balance(bill.vendor_id)
     
+    db.session.flush()
     return bill
 
 def sync_bill_gl(bill_id):

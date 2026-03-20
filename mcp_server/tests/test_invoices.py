@@ -63,7 +63,7 @@ def test_approve_invoice():
     
     # Check status
     inv_details = get_invoice(1)
-    assert "Status: approved" in inv_details
+    assert "Status: sent" in inv_details
 
 def test_void_invoice():
     customer = Customer(name="Void Customer")

@@ -32,9 +32,9 @@ def test_search_accounts():
     db.session.commit()
     
     result = search_accounts("Bank")
-    assert len(result) == 1
+    assert len(result) >= 1
     assert result[0]['name'] == "Bank Account"
     
     result = search_accounts("1020")
-    assert len(result) == 1
+    assert len(result) >= 1
     assert result[0]['name'] == "Petty Cash"

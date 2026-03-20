@@ -143,8 +143,8 @@ def post_invoice(invoice_id):
     if invoice.status != 'draft':
         raise ValueError(f"Invoice {invoice.invoice_number} is already posted or cancelled")
 
-    # Update invoice status to approved
-    invoice.status = 'approved'
+    # Update invoice status to sent
+    invoice.status = 'sent'
     
     # Generate/Sync journal entry
     sync_invoice_journal(invoice)
@@ -152,6 +152,7 @@ def post_invoice(invoice_id):
     # 3.2.5 Update customer A/R balance
     update_customer_balance(invoice.customer_id)
     
+    db.session.flush()
     return invoice
 
 def update_customer_balance(customer_id):

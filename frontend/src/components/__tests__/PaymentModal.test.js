@@ -2,8 +2,10 @@ import { mount, flushPromises } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import PaymentModal from "../PaymentModal.vue";
 import paymentService from "../../services/paymentService";
+import accountService from "../../services/accountService";
 
 vi.mock("../../services/paymentService");
+vi.mock("../../services/accountService");
 
 describe("PaymentModal.vue", () => {
   const mockInvoice = {
@@ -13,8 +15,16 @@ describe("PaymentModal.vue", () => {
     customer_id: 10,
   };
 
+  const mockAccounts = [
+    { id: 1, code: "1000", name: "Cash" },
+    { id: 2, code: "1001", name: "Bank" },
+  ];
+
   beforeEach(() => {
     vi.resetAllMocks();
+    accountService.getAccounts.mockResolvedValue({
+      data: { accounts: mockAccounts },
+    });
   });
 
   it("should not render when isOpen is false", () => {

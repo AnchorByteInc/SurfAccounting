@@ -137,27 +137,27 @@ def test_tax_account_linking(app):
         assert tax_line_inv.credit == Decimal('10.00')
         assert tax_line_inv.debit == Decimal('0.00')
 
-        # 3. Test Fallback (Default tax account should be used)
-        bill2 = Bill(
-            vendor_id=vendor.id,
-            bill_number="BILL-002",
+        # 3. Test Fallback (Default tax account should be used for invoicing)
+        invoice2 = Invoice(
+            customer_id=customer.id,
+            invoice_number="INV-002",
             issue_date=date.today(),
             due_date=date.today() + timedelta(days=30),
             status='draft'
         )
-        bill_line2 = BillLine(
-            description="Bill Line 2",
+        inv_line2 = InvoiceLine(
+            description="Inv Line 2",
             quantity=Decimal('1.00'),
-            unit_cost=Decimal('100.00'),
-            account_id=expense_acc.id
+            unit_price=Decimal('100.00'),
+            account_id=sales_acc.id
         )
-        bill_line2.taxes.append(default_tax)
-        bill2.lines.append(bill_line2)
-        db.session.add(bill2)
+        inv_line2.taxes.append(default_tax)
+        invoice2.lines.append(inv_line2)
+        db.session.add(invoice2)
         db.session.commit()
-        post_bill(bill2.id)
+        post_invoice(invoice2.id)
         
-        je_bill2 = JournalEntry.query.filter_by(source_module="BILL", source_id=bill2.id).first()
-        tax_line2 = next((line for line in je_bill2.lines if line.account_id == default_tax_acc.id), None)
+        je_inv2 = JournalEntry.query.filter_by(source_module="INV", source_id=invoice2.id).first()
+        tax_line2 = next((line for line in je_inv2.lines if line.account_id == default_tax_acc.id), None)
         assert tax_line2 is not None
-        assert tax_line2.debit == Decimal('5.00')
+        assert tax_line2.credit == Decimal('5.00')

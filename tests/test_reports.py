@@ -278,8 +278,7 @@ def test_reports_api(client, auth_headers, app):
         db.session.add(line)
         db.session.commit()
         post_invoice(invoice.id)
-
-    # Test Income Statement API
+        db.session.commit()
     start_date = (date.today() - timedelta(days=1)).isoformat()
     end_date = (date.today() + timedelta(days=1)).isoformat()
     response = client.get(f'/api/reports/income-statement?start_date={start_date}&end_date={end_date}', headers=auth_headers)

@@ -10,6 +10,9 @@ vi.mock("vue-router", () => ({
   useRouter: vi.fn(() => ({
     push: mockPush,
   })),
+  useRoute: vi.fn(() => ({
+    query: {},
+  })),
 }));
 
 describe("LoginView.vue", () => {
@@ -22,7 +25,7 @@ describe("LoginView.vue", () => {
         plugins: [createTestingPinia()],
       },
     });
-    expect(wrapper.find("h2").text()).toBe("Sign in to your account");
+    expect(wrapper.find("h2").text()).toBe("Welcome back");
     expect(wrapper.find("input#username").exists()).toBe(true);
     expect(wrapper.find("input#password").exists()).toBe(true);
     expect(wrapper.find('button[type="submit"]').text()).toBe("Sign in");

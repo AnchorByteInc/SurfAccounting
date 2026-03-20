@@ -63,10 +63,26 @@ def search_accounts(query: str):
             )
             keyword_accounts = session.query(Account).filter(search_filter).all()
 
-            # Merge results, keeping semantic results first and ensuring uniqueness
-            seen_ids = set(acc.id for acc in semantic_accounts)
-            final_accounts = list(semantic_accounts)
+            # Merge results, prioritizing exact keyword matches, then semantic, then partial keyword
+            exact_matches = []
+            partial_matches = []
             for acc in keyword_accounts:
+                if acc.code == query or acc.name.lower() == query.lower():
+                    exact_matches.append(acc)
+                else:
+                    partial_matches.append(acc)
+            
+            seen_ids = set(acc.id for acc in exact_matches)
+            final_accounts = list(exact_matches)
+            
+            # Add semantic results next
+            for acc in semantic_accounts:
+                if acc.id not in seen_ids:
+                    final_accounts.append(acc)
+                    seen_ids.add(acc.id)
+            
+            # Add remaining partial keyword matches
+            for acc in partial_matches:
                 if acc.id not in seen_ids:
                     final_accounts.append(acc)
                     seen_ids.add(acc.id)

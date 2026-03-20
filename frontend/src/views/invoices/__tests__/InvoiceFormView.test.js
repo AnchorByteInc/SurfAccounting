@@ -1,10 +1,11 @@
 import { mount, flushPromises } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import InvoiceFormView from "../InvoiceFormView.vue";
 import invoiceService from "../../../services/invoiceService";
 import customerService from "../../../services/customerService";
 import accountService from "../../../services/accountService";
-import settingsService from "../../../services/settingsService";
+import taxService from "../../../services/taxService";
+import itemService from "../../../services/itemService";
 import { useRouter, useRoute } from "vue-router";
 
 vi.mock("vue-router", () => ({
@@ -22,7 +23,8 @@ vi.mock("vue-router", () => ({
 vi.mock("../../../services/invoiceService");
 vi.mock("../../../services/customerService");
 vi.mock("../../../services/accountService");
-vi.mock("../../../services/settingsService");
+vi.mock("../../../services/taxService");
+vi.mock("../../../services/itemService");
 
 describe("InvoiceFormView.vue", () => {
   const mockCustomers = [
@@ -33,11 +35,19 @@ describe("InvoiceFormView.vue", () => {
     { id: 1, code: "4000", name: "Sales" },
     { id: 2, code: "4001", name: "Other Revenue" },
   ];
-  const mockSettings = {
-    settings: [{ tax_rate: "0.1" }], // 10% tax
-  };
+  const mockTaxes = [
+    { id: 1, name: "VAT", rate: "0.1" },
+  ];
+  const mockItems = [
+    { id: 1, name: "Test Item", price: "100", income_account_id: 1, sales_taxes: [{id: 1}] },
+  ];
 
   beforeEach(() => {
+    // Create a teleport target
+    const el = document.createElement('div')
+    el.id = 'navbar-actions'
+    document.body.appendChild(el)
+
     vi.resetAllMocks();
     customerService.getCustomers.mockResolvedValue({
       data: { customers: mockCustomers },
@@ -45,13 +55,25 @@ describe("InvoiceFormView.vue", () => {
     accountService.getAccounts.mockResolvedValue({
       data: { accounts: mockAccounts },
     });
-    settingsService.getSettingsList.mockResolvedValue({ data: mockSettings });
+    taxService.getTaxes.mockResolvedValue({
+      data: { taxes: mockTaxes },
+    });
+    itemService.getItems.mockResolvedValue({
+      data: { items: mockItems },
+    });
   });
+
+  afterEach(() => {
+    const el = document.getElementById('navbar-actions')
+    if (el) {
+      document.body.removeChild(el)
+    }
+  })
 
   it("should render the form with initial values", async () => {
     const wrapper = mount(InvoiceFormView, {
       global: {
-        stubs: ["RouterLink"],
+        stubs: ["RouterLink", "PaymentModal"],
       },
     });
     await flushPromises();
@@ -65,7 +87,7 @@ describe("InvoiceFormView.vue", () => {
   it("should calculate totals correctly", async () => {
     const wrapper = mount(InvoiceFormView, {
       global: {
-        stubs: ["RouterLink"],
+        stubs: ["RouterLink", "PaymentModal"],
       },
     });
     await flushPromises();
@@ -75,10 +97,11 @@ describe("InvoiceFormView.vue", () => {
 
     await qtyInput.setValue(2);
     await priceInput.setValue(100);
-
-    // subtotal = 2 * 100 = 200
-    // tax = 200 * 0.1 = 20
-    // total = 220
+    
+    // Select an item that has tax
+    const itemSelect = wrapper.find('table select');
+    await itemSelect.setValue(1);
+    await flushPromises();
 
     // Check totals in the UI
     const subtotalText = wrapper.text();
@@ -90,7 +113,7 @@ describe("InvoiceFormView.vue", () => {
   it("should add and remove lines", async () => {
     const wrapper = mount(InvoiceFormView, {
       global: {
-        stubs: ["RouterLink"],
+        stubs: ["RouterLink", "PaymentModal"],
       },
     });
     await flushPromises();
@@ -115,27 +138,19 @@ describe("InvoiceFormView.vue", () => {
 
     const wrapper = mount(InvoiceFormView, {
       global: {
-        stubs: ["RouterLink"],
+        stubs: ["RouterLink", "PaymentModal"],
       },
     });
     await flushPromises();
 
     // Fill the form
-    await wrapper.find("select").setValue(1);
-    await wrapper.findAll("input")[0].setValue("INV-2026-001");
+    await wrapper.find("select").setValue(1); // Customer
+    await wrapper.findAll("input")[0].setValue("INV-2026-001"); // Invoice Number
 
-    const lineDesc = wrapper.find('table input[type="text"]');
-    await lineDesc.setValue("Test Item");
-
-    const qtyInput = wrapper.find('input[type="number"]');
-    await qtyInput.setValue(1);
-
-    const priceInput = wrapper.findAll('input[type="number"]')[1];
-    await priceInput.setValue(500);
-
-    // Set account
-    const accountSelect = wrapper.findAll("table select")[0];
-    await accountSelect.setValue(1);
+    // Selection of item
+    const itemSelect = wrapper.findAll("table select")[0];
+    await itemSelect.setValue(1);
+    await flushPromises();
 
     // Submit
     await wrapper.find("form").trigger("submit.prevent");

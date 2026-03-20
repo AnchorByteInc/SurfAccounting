@@ -85,7 +85,7 @@ def test_full_payment(app):
         
         assert invoice.total == Decimal('105.00')
         assert invoice.balance == Decimal('105.00')
-        assert invoice.status == 'approved'
+        assert invoice.status == 'sent'
         
         # 2. Apply full payment
         payment = apply_payment(
@@ -164,7 +164,7 @@ def test_partial_payment(app):
         
         db.session.refresh(invoice)
         assert invoice.balance == Decimal('55.00')
-        assert invoice.status == 'approved' # Should not be paid
+        assert invoice.status == 'sent' # Should not be paid
         
         db.session.refresh(customer)
         assert customer.balance == Decimal('55.00')
