@@ -1,6 +1,7 @@
 import logging
 from logging.config import fileConfig
 
+import sqlalchemy as sa
 from flask import current_app
 
 from alembic import context
@@ -97,14 +98,37 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=get_metadata(),
-            **conf_args
-        )
+        dialect_name = connection.engine.dialect.name
 
-        with context.begin_transaction():
-            context.run_migrations()
+        # Implement locking to ensure only one instance runs migrations at a time
+        if dialect_name == "postgresql":
+            # PostgreSQL advisory lock (session-level)
+            connection.execute(sa.text("SELECT pg_advisory_lock(827342)"))
+        elif dialect_name == "mysql":
+            # MySQL named lock with a 5-minute timeout
+            lock_acquired = connection.execute(
+                sa.text("SELECT GET_LOCK('alembic_migration_lock', 300)")
+            ).scalar()
+            if not lock_acquired:
+                raise Exception("Could not acquire migration lock for MySQL after 300s")
+        elif dialect_name == "sqlite":
+            # SQLite busy timeout to wait for other instances
+            connection.execute(sa.text("PRAGMA busy_timeout = 30000"))
+
+        try:
+            context.configure(
+                connection=connection,
+                target_metadata=get_metadata(),
+                **conf_args
+            )
+
+            with context.begin_transaction():
+                context.run_migrations()
+        finally:
+            if dialect_name == "postgresql":
+                connection.execute(sa.text("SELECT pg_advisory_unlock(827342)"))
+            elif dialect_name == "mysql":
+                connection.execute(sa.text("SELECT RELEASE_LOCK('alembic_migration_lock')"))
 
 
 if context.is_offline_mode():
