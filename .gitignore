@@ -48,3 +48,4 @@ yarn-error.log*
 /.run/backend.run.xml
 /.run/dev.run.xml
 /.run/mcp.run.xml
+.output.txt
