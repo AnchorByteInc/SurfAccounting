@@ -8,8 +8,8 @@ root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from backend.config import Config
-from backend.extensions import db
+from backend.config import Config  # noqa: E402
+from backend.extensions import db  # noqa: E402
 
 def create_app(config_class=Config):
     """

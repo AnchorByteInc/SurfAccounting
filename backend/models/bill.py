@@ -2,7 +2,6 @@ from sqlalchemy import event
 from decimal import Decimal
 from ..extensions import db
 from .base import BaseModel
-from .tax import Tax, bill_line_taxes
 
 class Bill(db.Model, BaseModel):
     __tablename__ = 'bills'
@@ -38,7 +37,7 @@ class Bill(db.Model, BaseModel):
                     lines_to_sum.append(obj)
                     
         # Exclude lines that are about to be deleted
-        lines_to_sum = [l for l in lines_to_sum if l not in db.session.deleted]
+        lines_to_sum = [line for line in lines_to_sum if line not in db.session.deleted]
 
         # Preserve existing total if there are no lines and a positive total is already set (non-draft)
         preserve_existing_totals = (len(lines_to_sum) == 0 and self.total and Decimal(str(self.total)) > 0 and self.status != 'draft')

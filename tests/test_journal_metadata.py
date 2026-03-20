@@ -1,7 +1,6 @@
 
 import pytest
 from datetime import date
-from decimal import Decimal
 from backend.app import create_app
 from backend.config import Config
 from backend.extensions import db
@@ -10,7 +9,7 @@ from backend.models.customer import Customer
 from backend.models.vendor import Vendor
 from backend.models.invoice import Invoice, InvoiceLine
 from backend.models.bill import Bill, BillLine
-from backend.models.journal import JournalEntry, JournalEntryLine
+from backend.models.journal import JournalEntry
 from backend.services.invoice_service import post_invoice
 from backend.services.bill_service import post_bill
 from backend.services.payment_service import apply_payment, apply_vendor_payment
@@ -65,8 +64,8 @@ def test_invoice_posting_metadata(app):
         assert je.vendor_id is None
         
         # Check line descriptions
-        ar_line = next(l for l in je.lines if l.account_id == ar_acc.id)
-        rev_line = next(l for l in je.lines if l.account_id == rev_acc.id)
+        ar_line = next(line for line in je.lines if line.account_id == ar_acc.id)
+        rev_line = next(line for line in je.lines if line.account_id == rev_acc.id)
         
         assert "Accounts Receivable" in ar_line.description
         assert rev_line.description == "Test Item"
@@ -92,8 +91,8 @@ def test_bill_posting_metadata(app):
         assert je.vendor_id == vendor.id
         
         # Check line descriptions
-        ap_line = next(l for l in je.lines if l.account_id == ap_acc.id)
-        exp_line = next(l for l in je.lines if l.account_id == exp_acc.id)
+        ap_line = next(line for line in je.lines if line.account_id == ap_acc.id)
+        exp_line = next(line for line in je.lines if line.account_id == exp_acc.id)
         
         assert "Accounts Payable" in ap_line.description
         assert exp_line.description == "Office Supplies"
@@ -111,7 +110,7 @@ def test_payment_metadata(app):
         assert je.transaction_type == "Payment"
         assert je.customer_id == customer.id
         
-        cash_line = next(l for l in je.lines if l.account_id == cash_acc.id)
+        cash_line = next(line for line in je.lines if line.account_id == cash_acc.id)
         assert "Payment" in cash_line.description
 
 def test_vendor_payment_metadata(app):
@@ -127,6 +126,6 @@ def test_vendor_payment_metadata(app):
         assert je.transaction_type == "Payment"
         assert je.vendor_id == vendor.id
         
-        ap_line = next(l for l in je.lines if l.account_id == ap_acc.id)
+        ap_line = next(line for line in je.lines if line.account_id == ap_acc.id)
         assert "Accounts Payable" in ap_line.description
 

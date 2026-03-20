@@ -110,7 +110,7 @@ def test_get_invoice_lines_filtering(client, auth_headers, setup_data, app):
         db.session.commit()
     
     # Filter by description
-    response = client.get(f'/api/invoice_lines?description=Specific', headers=auth_headers)
+    response = client.get('/api/invoice_lines?description=Specific', headers=auth_headers)
     assert response.status_code == 200
     json_data = response.get_json()
     assert len(json_data['invoice_lines']) == 1

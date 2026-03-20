@@ -7,8 +7,7 @@ from backend.extensions import db
 from backend.models.account import Account
 from backend.models.vendor import Vendor
 from backend.models.bill import Bill, BillLine
-from backend.models.journal import JournalEntry, JournalEntryLine
-from backend.models.payment import VendorPayment
+from backend.models.journal import JournalEntry
 from backend.services.bill_service import post_bill, sync_bill_gl
 from backend.services.payment_service import apply_vendor_payment
 
@@ -83,12 +82,12 @@ def test_bill_approval_and_gl(app):
         assert len(je.lines) == 2
         
         # Check A/P line
-        ap_line = [l for l in je.lines if l.account_id == ap_account.id][0]
+        ap_line = [line for line in je.lines if line.account_id == ap_account.id][0]
         assert ap_line.credit == Decimal('1000.00')
         assert ap_line.debit == Decimal('0.00')
         
         # Check Expense line
-        exp_line = [l for l in je.lines if l.account_id == expense_account.id][0]
+        exp_line = [line for line in je.lines if line.account_id == expense_account.id][0]
         assert exp_line.debit == Decimal('1000.00')
         assert exp_line.credit == Decimal('0.00')
 
@@ -127,7 +126,7 @@ def test_bill_edit_after_approval(app):
         je = JournalEntry.query.filter_by(source_module="BILL", source_id=bill.id).first()
         assert je is not None
         assert len(je.lines) == 2
-        ap_line = [l for l in je.lines if l.account_id == ap_account.id][0]
+        ap_line = [line for line in je.lines if line.account_id == ap_account.id][0]
         assert ap_line.credit == Decimal('1000.00')
         
         # Edit the bill line
@@ -138,7 +137,7 @@ def test_bill_edit_after_approval(app):
         
         # Verify GL updated
         db.session.refresh(je)
-        ap_line = [l for l in je.lines if l.account_id == ap_account.id][0]
+        ap_line = [line for line in je.lines if line.account_id == ap_account.id][0]
         assert ap_line.credit == Decimal('1200.00')
         
         # Add another line
@@ -156,7 +155,7 @@ def test_bill_edit_after_approval(app):
         # Verify GL updated
         db.session.refresh(je)
         assert len(je.lines) == 3 # 1 AP, 2 Expense
-        ap_line = [l for l in je.lines if l.account_id == ap_account.id][0]
+        ap_line = [line for line in je.lines if line.account_id == ap_account.id][0]
         assert ap_line.credit == Decimal('1400.00') # 1200 + 200
 
 def test_bill_payment_clears_ap(app):
@@ -202,12 +201,12 @@ def test_bill_payment_clears_ap(app):
         assert je_pay.transaction_type == "Payment"
         
         # Check A/P line in Payment GL (Debit decreases liability)
-        ap_pay_line = [l for l in je_pay.lines if l.account_id == ap_account.id][0]
+        ap_pay_line = [line for line in je_pay.lines if line.account_id == ap_account.id][0]
         assert ap_pay_line.debit == Decimal('1000.00')
         assert ap_pay_line.credit == Decimal('0.00')
         
         # Check Cash line in Payment GL (Credit decreases asset)
-        cash_pay_line = [l for l in je_pay.lines if l.account_id == cash_account.id][0]
+        cash_pay_line = [line for line in je_pay.lines if line.account_id == cash_account.id][0]
         assert cash_pay_line.credit == Decimal('1000.00')
         assert cash_pay_line.debit == Decimal('0.00')
         

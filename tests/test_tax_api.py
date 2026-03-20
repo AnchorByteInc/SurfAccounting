@@ -2,7 +2,6 @@ import pytest
 from backend.app import create_app
 from backend.config import Config
 from backend.extensions import db
-from backend.models.tax import Tax
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'

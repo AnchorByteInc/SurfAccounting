@@ -8,7 +8,6 @@ from backend.models.account import Account
 from backend.models.vendor import Vendor
 from backend.models.bill import Bill, BillLine
 from backend.models.journal import JournalEntry
-from backend.models.payment import VendorPayment
 from backend.services.bill_service import post_bill
 from backend.services.payment_service import apply_vendor_payment
 
@@ -96,8 +95,8 @@ def test_apply_vendor_payment_full(app):
         
         # Debit: AP (1000.00)
         # Credit: Cash (1000.00)
-        ap_line = [l for l in journal_entry.lines if l.account_id == ap_account.id][0]
-        cash_line = [l for l in journal_entry.lines if l.account_id == cash_account.id][0]
+        ap_line = [line for line in journal_entry.lines if line.account_id == ap_account.id][0]
+        cash_line = [line for line in journal_entry.lines if line.account_id == cash_account.id][0]
         
         assert ap_line.debit == Decimal('1000.00')
         assert ap_line.credit == Decimal('0.00')

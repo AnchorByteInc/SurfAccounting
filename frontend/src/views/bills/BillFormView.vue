@@ -6,11 +6,7 @@
         <div class="space-y-4">
           <div class="form-group">
             <label class="form-label">Vendor *</label>
-            <select
-              v-model="bill.vendor_id"
-              required
-              class="form-select"
-            >
+            <select v-model="bill.vendor_id" required class="form-select">
               <option value="" disabled>Select a vendor</option>
               <option v-for="v in vendors" :key="v.id" :value="v.id">
                 {{ v.name }}
@@ -50,7 +46,9 @@
           </div>
           <div class="form-group">
             <label class="form-label">Status</label>
-            <div class="p-2 bg-primary/5 rounded font-bold capitalize text-primary text-center">
+            <div
+              class="p-2 bg-primary/5 rounded font-bold capitalize text-primary text-center"
+            >
               {{ bill.status }}
             </div>
           </div>
@@ -85,7 +83,11 @@
                     class="form-select rounded-[10px]"
                   >
                     <option :value="null">-- Select --</option>
-                    <option v-for="item in availableItems" :key="item.id" :value="item.id">
+                    <option
+                      v-for="item in availableItems"
+                      :key="item.id"
+                      :value="item.id"
+                    >
                       {{ item.name }}
                     </option>
                   </select>
@@ -104,7 +106,11 @@
                     required
                     class="form-select rounded-[10px]"
                   >
-                    <option v-for="a in expenseAccounts" :key="a.id" :value="a.id">
+                    <option
+                      v-for="a in expenseAccounts"
+                      :key="a.id"
+                      :value="a.id"
+                    >
                       {{ a.code }} - {{ a.name }}
                     </option>
                   </select>
@@ -131,7 +137,11 @@
                 </td>
                 <td class="p-2">
                   <div class="flex flex-wrap gap-x-3 gap-y-1">
-                    <label v-for="tax in availableTaxes" :key="tax.id" class="inline-flex items-center text-xs cursor-pointer hover:bg-primary/8 p-1 rounded">
+                    <label
+                      v-for="tax in availableTaxes"
+                      :key="tax.id"
+                      class="inline-flex items-center text-xs cursor-pointer hover:bg-primary/8 p-1 rounded"
+                    >
                       <input
                         type="checkbox"
                         :value="tax.id"
@@ -141,7 +151,10 @@
                       {{ tax.name }}
                     </label>
                   </div>
-                  <div v-if="availableTaxes.length === 0" class="text-xs text-muted italic">
+                  <div
+                    v-if="availableTaxes.length === 0"
+                    class="text-xs text-muted italic"
+                  >
                     No taxes defined
                   </div>
                 </td>
@@ -180,19 +193,31 @@
         <div class="w-full md:w-64 space-y-3">
           <div class="flex justify-between text-sm">
             <span class="text-muted">Subtotal</span>
-            <span class="font-bold text-on-surface">${{ totals.subtotal.toFixed(2) }}</span>
+            <span class="font-bold text-on-surface"
+              >${{ totals.subtotal.toFixed(2) }}</span
+            >
           </div>
           <template v-if="Object.keys(totals.taxBreakdown).length > 1">
-            <div v-for="(amount, name) in totals.taxBreakdown" :key="name" class="flex justify-between text-sm">
+            <div
+              v-for="(amount, name) in totals.taxBreakdown"
+              :key="name"
+              class="flex justify-between text-sm"
+            >
               <span class="text-muted">{{ name }}</span>
-              <span class="font-bold text-on-surface">${{ amount.toFixed(2) }}</span>
+              <span class="font-bold text-on-surface"
+                >${{ amount.toFixed(2) }}</span
+              >
             </div>
           </template>
           <div v-else class="flex justify-between text-sm">
             <span class="text-muted">Tax</span>
-            <span class="font-bold text-on-surface">${{ totals.tax.toFixed(2) }}</span>
+            <span class="font-bold text-on-surface"
+              >${{ totals.tax.toFixed(2) }}</span
+            >
           </div>
-          <div class="flex justify-between text-lg font-bold border-t border-divider pt-3 text-on-surface">
+          <div
+            class="flex justify-between text-lg font-bold border-t border-divider pt-3 text-on-surface"
+          >
             <span>Total</span>
             <span>${{ totals.total.toFixed(2) }}</span>
           </div>
@@ -208,12 +233,10 @@
         >
           Cancel
         </button>
-        <button
-          type="submit"
-          :disabled="isSubmitting"
-          class="btn-primary"
-        >
-          {{ isSubmitting ? 'Saving...' : (isEdit ? 'Update Bill' : 'Create Bill') }}
+        <button type="submit" :disabled="isSubmitting" class="btn-primary">
+          {{
+            isSubmitting ? "Saving..." : isEdit ? "Update Bill" : "Create Bill"
+          }}
         </button>
       </div>
     </form>
@@ -232,7 +255,10 @@
           <span class="text-sm font-medium">Approve</span>
         </button>
         <button
-          v-if="(bill.status === 'approved' || bill.status === 'overdue') && Number(bill.balance) > 0"
+          v-if="
+            (bill.status === 'approved' || bill.status === 'overdue') &&
+            Number(bill.balance) > 0
+          "
           type="button"
           @click="isPaymentModalOpen = true"
           class="h-[40px] px-4 flex items-center justify-center rounded-full hover:bg-primary/8 gap-2 text-green-600"
@@ -254,14 +280,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
-import { useRoute, useRouter, RouterLink } from 'vue-router';
-import billService from '../../services/billService';
-import VendorPaymentModal from '../../components/VendorPaymentModal.vue';
-import itemService from '../../services/itemService';
-import vendorService from '../../services/vendorService';
-import accountService from '../../services/accountService';
-import taxService from '../../services/taxService';
+import { ref, reactive, computed, onMounted } from "vue";
+import { useRoute, useRouter, RouterLink } from "vue-router";
+import billService from "../../services/billService";
+import VendorPaymentModal from "../../components/VendorPaymentModal.vue";
+import itemService from "../../services/itemService";
+import vendorService from "../../services/vendorService";
+import accountService from "../../services/accountService";
+import taxService from "../../services/taxService";
 
 const route = useRoute();
 const router = useRouter();
@@ -276,20 +302,22 @@ const availableItems = ref([]);
 const defaultTaxRate = ref(0); // Removing its usage below, but keeping the ref for now to avoid errors if I miss any other usage
 
 const bill = reactive({
-  vendor_id: '',
-  bill_number: '',
-  issue_date: new Date().toISOString().split('T')[0],
-  due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  status: 'draft',
+  vendor_id: "",
+  bill_number: "",
+  issue_date: new Date().toISOString().split("T")[0],
+  due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0],
+  status: "draft",
   lines: [
     {
       item_id: null,
-      description: '',
-      account_id: '',
+      description: "",
+      account_id: "",
       quantity: 1,
       unit_cost: 0,
       tax_ids: [],
-    }
+    },
   ],
 });
 
@@ -298,13 +326,13 @@ const totals = computed(() => {
   let totalTax = 0;
   let taxBreakdown = {};
 
-  bill.lines.forEach(line => {
-    const lineSubtotal = (line.quantity * line.unit_cost || 0);
+  bill.lines.forEach((line) => {
+    const lineSubtotal = line.quantity * line.unit_cost || 0;
     subtotal += lineSubtotal;
 
     if (line.tax_ids && line.tax_ids.length > 0) {
-      line.tax_ids.forEach(taxId => {
-        const tax = availableTaxes.value.find(t => t.id === taxId);
+      line.tax_ids.forEach((taxId) => {
+        const tax = availableTaxes.value.find((t) => t.id === taxId);
         if (tax) {
           const taxAmount = lineSubtotal * Number(tax.rate);
           totalTax += taxAmount;
@@ -332,7 +360,7 @@ const fetchVendors = async () => {
     const response = await vendorService.getVendors({ per_page: 100 });
     vendors.value = response.data.vendors;
   } catch (error) {
-    console.error('Failed to fetch vendors:', error);
+    console.error("Failed to fetch vendors:", error);
   }
 };
 
@@ -340,36 +368,44 @@ const fetchAccounts = async () => {
   try {
     // Usually expense or asset accounts are used for bills
     const response = await accountService.getAccounts({ per_page: 0 });
-    // For simplicity, we filter in the frontend if the API doesn't support it well, 
+    // For simplicity, we filter in the frontend if the API doesn't support it well,
     // or just show all accounts if appropriate.
     // Based on the invoice example, it uses 'revenue'. For bills, 'expense' is better.
-    expenseAccounts.value = response.data.accounts.filter(a => 
-      ['expense', 'expenses', 'cost of goods sold', 'asset'].includes(a.type.toLowerCase())
+    expenseAccounts.value = response.data.accounts.filter((a) =>
+      ["expense", "expenses", "cost of goods sold", "asset"].includes(
+        a.type.toLowerCase(),
+      ),
     );
     // If no filtered accounts, just use all
     if (expenseAccounts.value.length === 0) {
       expenseAccounts.value = response.data.accounts;
     }
   } catch (error) {
-    console.error('Failed to fetch accounts:', error);
+    console.error("Failed to fetch accounts:", error);
   }
 };
 
 const fetchTaxes = async () => {
   try {
-    const response = await taxService.getTaxes({ per_page: 0, is_active: true });
+    const response = await taxService.getTaxes({
+      per_page: 0,
+      is_active: true,
+    });
     availableTaxes.value = response.data.taxes;
   } catch (error) {
-    console.error('Failed to fetch taxes:', error);
+    console.error("Failed to fetch taxes:", error);
   }
 };
 
 const fetchItems = async () => {
   try {
-    const response = await itemService.getItems({ per_page: 0, purchaseable: true });
+    const response = await itemService.getItems({
+      per_page: 0,
+      purchaseable: true,
+    });
     availableItems.value = response.data.items;
   } catch (error) {
-    console.error('Failed to fetch items:', error);
+    console.error("Failed to fetch items:", error);
   }
 };
 
@@ -386,8 +422,11 @@ const approveBill = async () => {
     await billService.approveBill(bill.id);
     await fetchBill();
   } catch (error) {
-    console.error('Failed to approve bill:', error);
-    alert('Failed to approve bill: ' + (error.response?.data?.message || error.message));
+    console.error("Failed to approve bill:", error);
+    alert(
+      "Failed to approve bill: " +
+        (error.response?.data?.message || error.message),
+    );
   } finally {
     isSubmitting.value = false;
   }
@@ -399,21 +438,21 @@ const fetchBill = async () => {
     const response = await billService.getBill(route.params.id);
     // Map taxes to tax_ids
     if (response.data.lines) {
-      response.data.lines.forEach(line => {
-        line.tax_ids = line.taxes ? line.taxes.map(t => t.id) : [];
+      response.data.lines.forEach((line) => {
+        line.tax_ids = line.taxes ? line.taxes.map((t) => t.id) : [];
       });
     }
     Object.assign(bill, response.data);
   } catch (error) {
-    console.error('Failed to fetch bill:', error);
-    alert('Failed to load bill.');
-    router.push('/bills');
+    console.error("Failed to fetch bill:", error);
+    alert("Failed to load bill.");
+    router.push("/bills");
   }
 };
 
 const onItemChange = (line) => {
   if (!line.item_id) return;
-  const item = availableItems.value.find(i => i.id === line.item_id);
+  const item = availableItems.value.find((i) => i.id === line.item_id);
   if (item) {
     line.description = item.description || item.name;
     line.unit_cost = Number(item.price);
@@ -426,8 +465,9 @@ const onItemChange = (line) => {
 const addLine = () => {
   bill.lines.push({
     item_id: null,
-    description: '',
-    account_id: expenseAccounts.value.length > 0 ? expenseAccounts.value[0].id : '',
+    description: "",
+    account_id:
+      expenseAccounts.value.length > 0 ? expenseAccounts.value[0].id : "",
     quantity: 1,
     unit_cost: 0,
     tax_ids: [],
@@ -441,17 +481,17 @@ const removeLine = (index) => {
 const saveBill = async () => {
   // 10.1.4 Frontend form validation
   if (bill.due_date < bill.issue_date) {
-    alert('Due date cannot be before issue date.');
-    return;
-  }
-  
-  if (bill.lines.some(l => l.quantity <= 0)) {
-    alert('All line items must have a quantity greater than zero.');
+    alert("Due date cannot be before issue date.");
     return;
   }
 
-  if (bill.lines.some(l => l.unit_cost < 0)) {
-    alert('Unit cost cannot be negative.');
+  if (bill.lines.some((line) => line.quantity <= 0)) {
+    alert("All line items must have a quantity greater than zero.");
+    return;
+  }
+
+  if (bill.lines.some((line) => line.unit_cost < 0)) {
+    alert("Unit cost cannot be negative.");
     return;
   }
 
@@ -462,10 +502,12 @@ const saveBill = async () => {
     } else {
       await billService.createBill(bill);
     }
-    router.push('/bills');
+    router.push("/bills");
   } catch (error) {
-    console.error('Failed to save bill:', error);
-    const errorMsg = error.response?.data?.msg || 'Failed to save bill. Please check all fields.';
+    console.error("Failed to save bill:", error);
+    const errorMsg =
+      error.response?.data?.msg ||
+      "Failed to save bill. Please check all fields.";
     alert(errorMsg);
   } finally {
     isSubmitting.value = false;
@@ -477,9 +519,9 @@ onMounted(async () => {
     fetchVendors(),
     fetchAccounts(),
     fetchTaxes(),
-    fetchItems()
+    fetchItems(),
   ]);
-  
+
   if (isEdit.value) {
     await fetchBill();
   } else if (expenseAccounts.value.length > 0) {

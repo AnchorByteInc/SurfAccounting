@@ -2,7 +2,6 @@ from backend.app import create_app
 from backend.extensions import db
 from backend.models.item import Item
 from flask_jwt_extended import create_access_token
-import json
 
 app = create_app()
 with app.app_context():

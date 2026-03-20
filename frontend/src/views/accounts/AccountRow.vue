@@ -1,19 +1,33 @@
 <template>
-  <tr @click="editAccount(account.id)" class="cursor-pointer hover:bg-primary/8">
+  <tr
+    @click="editAccount(account.id)"
+    class="cursor-pointer hover:bg-primary/8"
+  >
     <td class="whitespace-nowrap font-medium text-on-surface">
       <span :style="{ marginLeft: `${level * 24}px` }">{{ account.code }}</span>
     </td>
     <td class="whitespace-nowrap">
-      <span :class="{ 'font-bold': account.children && account.children.length > 0 }">{{ account.name }}</span>
+      <span
+        :class="{
+          'font-bold': account.children && account.children.length > 0,
+        }"
+        >{{ account.name }}</span
+      >
     </td>
     <td class="whitespace-nowrap text-muted">{{ account.type }}</td>
-    <td class="whitespace-nowrap text-muted">{{ account.subtype || '-' }}</td>
+    <td class="whitespace-nowrap text-muted">{{ account.subtype || "-" }}</td>
     <td class="whitespace-nowrap">
-      <span class="badge" 
-            :class="account.is_active ? 'bg-green-100 text-green-700' : 'badge-primary'">
-        {{ account.is_active ? 'Active' : 'Inactive' }}
+      <span
+        class="badge"
+        :class="
+          account.is_active ? 'bg-green-100 text-green-700' : 'badge-primary'
+        "
+      >
+        {{ account.is_active ? "Active" : "Inactive" }}
       </span>
-      <span v-if="account.is_system" class="badge bg-gray-100 text-muted ml-2">System</span>
+      <span v-if="account.is_system" class="badge bg-gray-100 text-muted ml-2"
+        >System</span
+      >
     </td>
     <td class="whitespace-nowrap text-right">
       <div class="flex justify-end gap-2">
@@ -48,21 +62,21 @@
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
-import accountService from '../../services/accountService';
+import { RouterLink, useRouter } from "vue-router";
+import accountService from "../../services/accountService";
 
 const props = defineProps({
   account: {
     type: Object,
-    required: true
+    required: true,
   },
   level: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(["refresh"]);
 
 const router = useRouter();
 
@@ -74,10 +88,14 @@ const confirmDelete = async (account) => {
   if (confirm(`Are you sure you want to delete account "${account.name}"?`)) {
     try {
       await accountService.deleteAccount(account.id);
-      emit('refresh');
+      emit("refresh");
     } catch (error) {
-      console.error('Failed to delete account:', error);
-      alert(error.response?.data?.message || error.response?.data?.msg || 'Failed to delete account.');
+      console.error("Failed to delete account:", error);
+      alert(
+        error.response?.data?.message ||
+          error.response?.data?.msg ||
+          "Failed to delete account.",
+      );
     }
   }
 };
@@ -86,6 +104,6 @@ const confirmDelete = async (account) => {
 <script>
 // Recursive component name
 export default {
-  name: 'AccountRow'
+  name: "AccountRow",
 };
 </script>

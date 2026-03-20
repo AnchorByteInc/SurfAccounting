@@ -4,7 +4,9 @@
       <!-- Business & Branding -->
       <div class="card card-hover flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
             <span class="material-icons">business</span>
           </div>
           <h3 class="m-0">Branding & Business</h3>
@@ -24,7 +26,9 @@
       <!-- Chart of Accounts -->
       <div class="card card-hover flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
             <span class="material-icons">account_balance</span>
           </div>
           <h3 class="m-0">Chart of Accounts</h3>
@@ -44,13 +48,16 @@
       <!-- Accounting Periods -->
       <div class="card card-hover flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
             <span class="material-icons">calendar_today</span>
           </div>
           <h3 class="m-0">Accounting Periods</h3>
         </div>
         <p class="text-sm text-muted mb-6 flex-1">
-          Open and close accounting periods to lock transactions for specific date ranges.
+          Open and close accounting periods to lock transactions for specific
+          date ranges.
         </p>
         <RouterLink
           to="/settings/accounting-periods"
@@ -64,7 +71,9 @@
       <!-- Taxes -->
       <div class="card card-hover flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
             <span class="material-icons">percent</span>
           </div>
           <h3 class="m-0">Taxes</h3>
@@ -84,7 +93,9 @@
       <!-- Users -->
       <div class="card card-hover flex flex-col">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
             <span class="material-icons">people</span>
           </div>
           <h3 class="m-0">Users</h3>
@@ -105,5 +116,5 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from "vue-router";
 </script>

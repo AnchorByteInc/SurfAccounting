@@ -4,7 +4,7 @@
       <div class="card grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="form-group">
           <label class="form-label">Date</label>
-          <input v-model="form.date" type="date" required class="form-input">
+          <input v-model="form.date" type="date" required class="form-input" />
         </div>
         <div class="form-group">
           <label class="form-label">Transaction Type</label>
@@ -20,11 +20,21 @@
         </div>
         <div class="form-group">
           <label class="form-label">Reference</label>
-          <input v-model="form.reference" type="text" class="form-input" placeholder="Optional ref #">
+          <input
+            v-model="form.reference"
+            type="text"
+            class="form-input"
+            placeholder="Optional ref #"
+          />
         </div>
         <div class="form-group">
           <label class="form-label">Memo</label>
-          <input v-model="form.memo" type="text" class="form-input" placeholder="Global description">
+          <input
+            v-model="form.memo"
+            type="text"
+            class="form-input"
+            placeholder="Global description"
+          />
         </div>
       </div>
 
@@ -46,9 +56,17 @@
             <tbody>
               <tr v-for="(line, index) in form.lines" :key="index">
                 <td class="p-2">
-                  <select v-model="line.account_id" required class="form-select rounded-[10px]">
+                  <select
+                    v-model="line.account_id"
+                    required
+                    class="form-select rounded-[10px]"
+                  >
                     <option disabled value="">Select an account</option>
-                    <option v-for="account in accounts" :key="account.id" :value="account.id">
+                    <option
+                      v-for="account in accounts"
+                      :key="account.id"
+                      :value="account.id"
+                    >
                       {{ account.code }} - {{ account.name }}
                     </option>
                   </select>
@@ -59,7 +77,7 @@
                     type="text"
                     class="form-input rounded-[10px]"
                     placeholder="Line details..."
-                  >
+                  />
                 </td>
                 <td class="p-2">
                   <input
@@ -70,7 +88,7 @@
                     class="form-input rounded-[10px] text-right"
                     placeholder="0.00"
                     @input="clearOpposite(line, 'debit')"
-                  >
+                  />
                 </td>
                 <td class="p-2">
                   <input
@@ -81,7 +99,7 @@
                     class="form-input rounded-[10px] text-right"
                     placeholder="0.00"
                     @input="clearOpposite(line, 'credit')"
-                  >
+                  />
                 </td>
                 <td class="p-2 text-right">
                   <button
@@ -98,23 +116,51 @@
             </tbody>
             <tfoot>
               <tr class="font-bold border-t border-divider">
-                <td class="px-6 py-4 text-right text-muted uppercase text-xs" colspan="2">Totals</td>
-                <td class="px-6 py-4 text-right" :class="{'text-error': !isBalanced, 'text-on-surface': isBalanced}">{{ formatCurrency(totalDebits) }}</td>
-                <td class="px-6 py-4 text-right" :class="{'text-error': !isBalanced, 'text-on-surface': isBalanced}">{{ formatCurrency(totalCredits) }}</td>
+                <td
+                  class="px-6 py-4 text-right text-muted uppercase text-xs"
+                  colspan="2"
+                >
+                  Totals
+                </td>
+                <td
+                  class="px-6 py-4 text-right"
+                  :class="{
+                    'text-error': !isBalanced,
+                    'text-on-surface': isBalanced,
+                  }"
+                >
+                  {{ formatCurrency(totalDebits) }}
+                </td>
+                <td
+                  class="px-6 py-4 text-right"
+                  :class="{
+                    'text-error': !isBalanced,
+                    'text-on-surface': isBalanced,
+                  }"
+                >
+                  {{ formatCurrency(totalCredits) }}
+                </td>
                 <td></td>
               </tr>
             </tfoot>
           </table>
         </div>
         <div class="p-6 border-t border-divider">
-          <button type="button" @click="addLine" class="h-[40px] px-4 rounded-full text-sm text-primary font-bold hover:bg-primary/8 flex items-center gap-1">
+          <button
+            type="button"
+            @click="addLine"
+            class="h-[40px] px-4 rounded-full text-sm text-primary font-bold hover:bg-primary/8 flex items-center gap-1"
+          >
             <span class="material-icons text-[18px]">add</span>
             Add Line
           </button>
         </div>
       </div>
 
-      <div v-if="error" class="mx-4 p-4 rounded-lg bg-error/10 text-error font-bold text-sm">
+      <div
+        v-if="error"
+        class="mx-4 p-4 rounded-lg bg-error/10 text-error font-bold text-sm"
+      >
         {{ error }}
       </div>
 
@@ -131,7 +177,7 @@
           class="btn-primary"
           :disabled="!isBalanced || loading"
         >
-          {{ loading ? 'Saving...' : 'Save Entry' }}
+          {{ loading ? "Saving..." : "Save Entry" }}
         </button>
       </div>
     </form>
@@ -139,10 +185,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter, RouterLink } from 'vue-router';
-import journalService from '../../services/journalService';
-import accountService from '../../services/accountService';
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter, RouterLink } from "vue-router";
+import journalService from "../../services/journalService";
+import accountService from "../../services/accountService";
 
 const route = useRoute();
 const router = useRouter();
@@ -154,21 +200,27 @@ const accounts = ref([]);
 
 const form = ref({
   date: new Date().toISOString().substr(0, 10),
-  transaction_type: 'Journal Entry',
-  reference: '',
-  memo: '',
+  transaction_type: "Journal Entry",
+  reference: "",
+  memo: "",
   lines: [
-    { account_id: '', description: '', debit: null, credit: null },
-    { account_id: '', description: '', debit: null, credit: null },
+    { account_id: "", description: "", debit: null, credit: null },
+    { account_id: "", description: "", debit: null, credit: null },
   ],
 });
 
 const totalDebits = computed(() => {
-  return form.value.lines.reduce((sum, line) => sum + (Number(line.debit) || 0), 0);
+  return form.value.lines.reduce(
+    (sum, line) => sum + (Number(line.debit) || 0),
+    0,
+  );
 });
 
 const totalCredits = computed(() => {
-  return form.value.lines.reduce((sum, line) => sum + (Number(line.credit) || 0), 0);
+  return form.value.lines.reduce(
+    (sum, line) => sum + (Number(line.credit) || 0),
+    0,
+  );
 });
 
 const isBalanced = computed(() => {
@@ -182,7 +234,7 @@ const fetchAccounts = async () => {
     const response = await accountService.getAccounts({ per_page: 1000 });
     accounts.value = response.data.accounts;
   } catch (err) {
-    console.error('Failed to fetch accounts:', err);
+    console.error("Failed to fetch accounts:", err);
   }
 };
 
@@ -193,25 +245,30 @@ const fetchEntry = async () => {
     const data = response.data;
     form.value = {
       date: data.date,
-      transaction_type: data.transaction_type || 'Journal Entry',
-      reference: data.reference || '',
-      memo: data.memo || '',
-      lines: data.lines.map(line => ({
+      transaction_type: data.transaction_type || "Journal Entry",
+      reference: data.reference || "",
+      memo: data.memo || "",
+      lines: data.lines.map((line) => ({
         id: line.id,
         account_id: line.account_id,
-        description: line.description || '',
+        description: line.description || "",
         debit: parseFloat(line.debit) || null,
         credit: parseFloat(line.credit) || null,
       })),
     };
   } catch (err) {
-    console.error('Failed to fetch entry:', err);
-    error.value = 'Failed to load journal entry.';
+    console.error("Failed to fetch entry:", err);
+    error.value = "Failed to load journal entry.";
   }
 };
 
 const addLine = () => {
-  form.value.lines.push({ account_id: '', description: '', debit: null, credit: null });
+  form.value.lines.push({
+    account_id: "",
+    description: "",
+    debit: null,
+    credit: null,
+  });
 };
 
 const removeLine = (index) => {
@@ -219,20 +276,23 @@ const removeLine = (index) => {
 };
 
 const clearOpposite = (line, field) => {
-  if (field === 'debit' && line.debit > 0) {
+  if (field === "debit" && line.debit > 0) {
     line.credit = null;
-  } else if (field === 'credit' && line.credit > 0) {
+  } else if (field === "credit" && line.credit > 0) {
     line.debit = null;
   }
 };
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
 };
 
 const saveEntry = async () => {
   if (!isBalanced.value) {
-    error.value = 'Journal entry must be balanced and have non-zero amounts.';
+    error.value = "Journal entry must be balanced and have non-zero amounts.";
     return;
   }
 
@@ -242,7 +302,9 @@ const saveEntry = async () => {
   try {
     const payload = {
       ...form.value,
-      lines: form.value.lines.filter(l => (l.debit || 0) > 0 || (l.credit || 0) > 0)
+      lines: form.value.lines.filter(
+        (line) => (line.debit || 0) > 0 || (line.credit || 0) > 0,
+      ),
     };
 
     if (isEdit.value) {
@@ -250,10 +312,11 @@ const saveEntry = async () => {
     } else {
       await journalService.createJournalEntry(payload);
     }
-    router.push('/journals');
+    router.push("/journals");
   } catch (err) {
-    console.error('Save error:', err);
-    error.value = err.response?.data?.message || 'Failed to save journal entry.';
+    console.error("Save error:", err);
+    error.value =
+      err.response?.data?.message || "Failed to save journal entry.";
   } finally {
     loading.value = false;
   }

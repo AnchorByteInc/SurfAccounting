@@ -23,7 +23,9 @@
             placeholder="e.g. 7.00"
             class="form-input"
           />
-          <p class="text-xs text-muted mt-1">Enter the percentage value. 7% should be entered as 7.</p>
+          <p class="text-xs text-muted mt-1">
+            Enter the percentage value. 7% should be entered as 7.
+          </p>
         </div>
 
         <div>
@@ -51,39 +53,43 @@
             <label class="form-label">Asset Account (for billing)</label>
             <select v-model="tax.asset_account_id" class="form-input">
               <option :value="null">None (Use Default)</option>
-              <option v-for="acc in assetAccounts" :key="acc.id" :value="acc.id">
+              <option
+                v-for="acc in assetAccounts"
+                :key="acc.id"
+                :value="acc.id"
+              >
                 {{ acc.code }} - {{ acc.name }}
               </option>
             </select>
-            <p class="text-xs text-muted mt-1">GL account for recoverable tax from vendor bills.</p>
+            <p class="text-xs text-muted mt-1">
+              GL account for recoverable tax from vendor bills.
+            </p>
           </div>
 
           <div>
             <label class="form-label">Liability Account (for invoicing)</label>
             <select v-model="tax.liability_account_id" class="form-input">
               <option :value="null">None (Use Default)</option>
-              <option v-for="acc in liabilityAccounts" :key="acc.id" :value="acc.id">
+              <option
+                v-for="acc in liabilityAccounts"
+                :key="acc.id"
+                :value="acc.id"
+              >
                 {{ acc.code }} - {{ acc.name }}
               </option>
             </select>
-            <p class="text-xs text-muted mt-1">GL account for tax payable from customer invoices.</p>
+            <p class="text-xs text-muted mt-1">
+              GL account for tax payable from customer invoices.
+            </p>
           </div>
         </div>
 
         <div class="pt-4 flex justify-end gap-3">
-          <button
-            type="button"
-            @click="router.back()"
-            class="btn-secondary"
-          >
+          <button type="button" @click="router.back()" class="btn-secondary">
             Cancel
           </button>
-          <button
-            type="submit"
-            :disabled="submitting"
-            class="btn-primary"
-          >
-            {{ submitting ? 'Saving...' : 'Save Tax' }}
+          <button type="submit" :disabled="submitting" class="btn-primary">
+            {{ submitting ? "Saving..." : "Save Tax" }}
           </button>
         </div>
       </form>
@@ -92,10 +98,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import taxService from '../../services/taxService';
-import accountService from '../../services/accountService';
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import taxService from "../../services/taxService";
+import accountService from "../../services/accountService";
 
 const route = useRoute();
 const router = useRouter();
@@ -104,23 +110,27 @@ const isEdit = computed(() => !!route.params.id);
 const submitting = ref(false);
 const accounts = ref([]);
 
-const assetAccounts = computed(() => accounts.value.filter(a => a.type === 'Asset'));
-const liabilityAccounts = computed(() => accounts.value.filter(a => a.type === 'Liability'));
+const assetAccounts = computed(() =>
+  accounts.value.filter((a) => a.type === "Asset"),
+);
+const liabilityAccounts = computed(() =>
+  accounts.value.filter((a) => a.type === "Liability"),
+);
 
 const tax = ref({
-  name: '',
+  name: "",
   rate: 0,
-  description: '',
+  description: "",
   is_active: true,
   asset_account_id: null,
-  liability_account_id: null
+  liability_account_id: null,
 });
 
 const taxRatePercent = computed({
   get: () => (tax.value.rate * 100).toFixed(2),
   set: (val) => {
     tax.value.rate = parseFloat(val) / 100;
-  }
+  },
 });
 
 const fetchTax = async () => {
@@ -129,8 +139,8 @@ const fetchTax = async () => {
     const response = await taxService.getTax(route.params.id);
     tax.value = response.data;
   } catch (error) {
-    console.error('Failed to fetch tax:', error);
-    alert('Failed to load tax data.');
+    console.error("Failed to fetch tax:", error);
+    alert("Failed to load tax data.");
   }
 };
 
@@ -142,10 +152,10 @@ const saveTax = async () => {
     } else {
       await taxService.createTax(tax.value);
     }
-    router.push('/settings/taxes');
+    router.push("/settings/taxes");
   } catch (error) {
-    console.error('Failed to save tax:', error);
-    const msg = error.response?.data?.message || 'Failed to save tax.';
+    console.error("Failed to save tax:", error);
+    const msg = error.response?.data?.message || "Failed to save tax.";
     alert(msg);
   } finally {
     submitting.value = false;
@@ -157,7 +167,7 @@ const fetchAccounts = async () => {
     const response = await accountService.getAccounts({ per_page: 1000 });
     accounts.value = response.data.accounts;
   } catch (error) {
-    console.error('Failed to fetch accounts:', error);
+    console.error("Failed to fetch accounts:", error);
   }
 };
 

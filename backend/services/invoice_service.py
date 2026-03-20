@@ -4,9 +4,7 @@ from ..models.journal import JournalEntry, JournalEntryLine
 from ..models.account import Account
 from ..models.customer import Customer
 from ..utils.validation import validate_date_is_open, validate_positive_amount, validate_date_order
-from datetime import date
 from ..utils.money import to_decimal, zero
-from sqlalchemy import event
 
 def sync_invoice_journal(invoice, delete=False):
     """

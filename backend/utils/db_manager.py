@@ -1,19 +1,17 @@
 import os
 import sys
 from datetime import date
-from sqlalchemy import text
 
 # Add project root to sys.path if not there
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from backend.app import create_app
-from backend.extensions import db
-from backend.seed import seed_data
-from backend.models.settings import Settings
-from backend.models.accounting_period import AccountingPeriod
-from backend.models.account import Account
+from backend.app import create_app  # noqa: E402
+from backend.extensions import db  # noqa: E402
+from backend.seed import seed_data  # noqa: E402
+from backend.models.settings import Settings  # noqa: E402
+from backend.models.accounting_period import AccountingPeriod  # noqa: E402
 
 def reset_database(interactive=True):
     """

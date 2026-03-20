@@ -9,7 +9,7 @@ from backend.models.customer import Customer
 from backend.models.invoice import Invoice, InvoiceLine
 from backend.models.tax import Tax
 from backend.models.settings import Settings
-from backend.models.journal import JournalEntry, JournalEntryLine
+from backend.models.journal import JournalEntry
 from backend.services.invoice_service import post_invoice
 from backend.services.payment_service import apply_payment
 
@@ -108,8 +108,8 @@ def test_full_payment(app):
         cash_account = Account.query.filter_by(code="1000").first()
         ar_account = Account.query.filter_by(code="1200").first()
         
-        cash_line = [l for l in journal_entry.lines if l.account_id == cash_account.id][0]
-        ar_line = [l for l in journal_entry.lines if l.account_id == ar_account.id][0]
+        cash_line = [line for line in journal_entry.lines if line.account_id == cash_account.id][0]
+        ar_line = [line for line in journal_entry.lines if line.account_id == ar_account.id][0]
         
         assert cash_line.debit == Decimal('105.00')
         assert ar_line.credit == Decimal('105.00')
@@ -154,7 +154,7 @@ def test_partial_payment(app):
         assert invoice.total == Decimal('105.00')
         
         # 2. Apply partial payment
-        payment1 = apply_payment(
+        apply_payment(
             amount=Decimal('50.00'),
             date_paid=date.today(),
             customer_id=customer.id,
@@ -170,7 +170,7 @@ def test_partial_payment(app):
         assert customer.balance == Decimal('55.00')
         
         # 3. Apply second partial payment
-        payment2 = apply_payment(
+        apply_payment(
             amount=Decimal('55.00'),
             date_paid=date.today(),
             customer_id=customer.id,

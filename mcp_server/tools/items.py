@@ -67,13 +67,20 @@ def update_item(id: int, name: str = None, description: str = None, price: float
     Update an existing product or service.
     """
     updates = {}
-    if name is not None: updates['name'] = name
-    if description is not None: updates['description'] = description
-    if price is not None: updates['price'] = price
-    if sellable is not None: updates['sellable'] = sellable
-    if income_account_id is not None: updates['income_account_id'] = income_account_id
-    if purchaseable is not None: updates['purchaseable'] = purchaseable
-    if expense_account_id is not None: updates['expense_account_id'] = expense_account_id
+    if name is not None:
+        updates['name'] = name
+    if description is not None:
+        updates['description'] = description
+    if price is not None:
+        updates['price'] = price
+    if sellable is not None:
+        updates['sellable'] = sellable
+    if income_account_id is not None:
+        updates['income_account_id'] = income_account_id
+    if purchaseable is not None:
+        updates['purchaseable'] = purchaseable
+    if expense_account_id is not None:
+        updates['expense_account_id'] = expense_account_id
     
     if not updates:
         return "No valid fields provided for update."

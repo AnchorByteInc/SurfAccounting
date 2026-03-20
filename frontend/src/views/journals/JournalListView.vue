@@ -18,12 +18,15 @@
           >
             <span class="material-icons">more_vert</span>
           </button>
-          <div 
+          <div
             v-if="showMoreMenu"
             class="absolute right-0 mt-1 w-48 bg-white rounded-[14px] shadow-lg border border-gray-100 py-1 z-50"
           >
-            <button 
-              @click="showImportModal = true; showMoreMenu = false"
+            <button
+              @click="
+                showImportModal = true;
+                showMoreMenu = false;
+              "
               class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary/5 flex items-center gap-2"
             >
               <span class="material-icons text-[18px]">upload_file</span>
@@ -34,11 +37,24 @@
       </div>
     </Teleport>
 
-    <BulkImportModal 
+    <BulkImportModal
       :is-open="showImportModal"
       title="Bulk Import Journal Entries"
       upload-url="/journal_entries/bulk-import"
-      :template-fields="['date', 'transaction_type', 'reference', 'memo', 'account_code', 'debit', 'credit', 'description', 'source_module', 'source_id', 'vendor_id', 'customer_id']"
+      :template-fields="[
+        'date',
+        'transaction_type',
+        'reference',
+        'memo',
+        'account_code',
+        'debit',
+        'credit',
+        'description',
+        'source_module',
+        'source_id',
+        'vendor_id',
+        'customer_id',
+      ]"
       @close="showImportModal = false"
       @success="fetchEntries"
     />
@@ -47,19 +63,29 @@
     <div class="card flex flex-wrap gap-6">
       <div class="mb-0">
         <label class="form-label">Reference</label>
-        <input v-model="filters.reference" type="text" class="form-input" placeholder="Search reference...">
+        <input
+          v-model="filters.reference"
+          type="text"
+          class="form-input"
+          placeholder="Search reference..."
+        />
       </div>
       <div class="mb-0">
         <label class="form-label">Memo</label>
-        <input v-model="filters.memo" type="text" class="form-input" placeholder="Search memo...">
+        <input
+          v-model="filters.memo"
+          type="text"
+          class="form-input"
+          placeholder="Search memo..."
+        />
       </div>
       <div class="mb-0">
         <label class="form-label">Start Date</label>
-        <input v-model="filters.start_date" type="date" class="form-input">
+        <input v-model="filters.start_date" type="date" class="form-input" />
       </div>
       <div class="mb-0">
         <label class="form-label">End Date</label>
-        <input v-model="filters.end_date" type="date" class="form-input">
+        <input v-model="filters.end_date" type="date" class="form-input" />
       </div>
       <div class="flex items-end">
         <button @click="fetchEntries" class="btn-secondary">Filter</button>
@@ -79,21 +105,29 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="entry in entries" 
+          <tr
+            v-for="entry in entries"
             :key="entry.id"
             @click="editEntry(entry.id)"
             class="cursor-pointer hover:bg-primary/8"
           >
             <td class="whitespace-nowrap text-muted">{{ entry.date }}</td>
             <td class="whitespace-nowrap text-muted">
-              <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/5 text-primary">
-                {{ entry.transaction_type || 'Journal Entry' }}
+              <span
+                class="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/5 text-primary"
+              >
+                {{ entry.transaction_type || "Journal Entry" }}
               </span>
             </td>
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ entry.reference }}</td>
-            <td class="whitespace-nowrap text-muted truncate max-w-xs">{{ entry.memo }}</td>
-            <td class="whitespace-nowrap font-bold text-on-surface text-right">{{ formatCurrency(calculateTotal(entry)) }}</td>
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ entry.reference }}
+            </td>
+            <td class="whitespace-nowrap text-muted truncate max-w-xs">
+              {{ entry.memo }}
+            </td>
+            <td class="whitespace-nowrap font-bold text-on-surface text-right">
+              {{ formatCurrency(calculateTotal(entry)) }}
+            </td>
             <td class="whitespace-nowrap text-right">
               <div class="flex justify-end gap-2">
                 <RouterLink
@@ -123,17 +157,47 @@
       </table>
 
       <!-- Pagination -->
-      <div v-if="pagination.pages > 1" class="px-6 py-4 flex items-center justify-between border-t border-divider">
+      <div
+        v-if="pagination.pages > 1"
+        class="px-6 py-4 flex items-center justify-between border-t border-divider"
+      >
         <div class="flex-1 flex justify-between sm:hidden">
-          <button @click="prevPage" :disabled="pagination.current_page === 1" class="btn-secondary py-1 px-4">Previous</button>
-          <button @click="nextPage" :disabled="pagination.current_page === pagination.pages" class="btn-secondary py-1 px-4">Next</button>
+          <button
+            @click="prevPage"
+            :disabled="pagination.current_page === 1"
+            class="btn-secondary py-1 px-4"
+          >
+            Previous
+          </button>
+          <button
+            @click="nextPage"
+            :disabled="pagination.current_page === pagination.pages"
+            class="btn-secondary py-1 px-4"
+          >
+            Next
+          </button>
         </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+        >
           <div>
             <p class="text-sm text-muted">
-              Showing <span class="font-bold text-on-surface">{{ (pagination.current_page - 1) * pagination.per_page + 1 }}</span>
-              to <span class="font-bold text-on-surface">{{ Math.min(pagination.current_page * pagination.per_page, pagination.total) }}</span>
-              of <span class="font-bold text-on-surface">{{ pagination.total }}</span> results
+              Showing
+              <span class="font-bold text-on-surface">{{
+                (pagination.current_page - 1) * pagination.per_page + 1
+              }}</span>
+              to
+              <span class="font-bold text-on-surface">{{
+                Math.min(
+                  pagination.current_page * pagination.per_page,
+                  pagination.total,
+                )
+              }}</span>
+              of
+              <span class="font-bold text-on-surface">{{
+                pagination.total
+              }}</span>
+              results
             </p>
           </div>
           <div>
@@ -143,7 +207,11 @@
                 :key="page"
                 @click="changePage(page)"
                 class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold transition-colors"
-                :class="page === pagination.current_page ? 'bg-primary text-white' : 'text-muted hover:bg-primary/8'"
+                :class="
+                  page === pagination.current_page
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:bg-primary/8'
+                "
               >
                 {{ page }}
               </button>
@@ -156,10 +224,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import journalService from '../../services/journalService';
-import BulkImportModal from '../../components/BulkImportModal.vue';
+import { ref, onMounted, onUnmounted } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import journalService from "../../services/journalService";
+import BulkImportModal from "../../components/BulkImportModal.vue";
 
 const router = useRouter();
 
@@ -175,10 +243,10 @@ const closeMoreMenu = () => {
   showMoreMenu.value = false;
 };
 const filters = ref({
-  reference: '',
-  memo: '',
-  start_date: '',
-  end_date: '',
+  reference: "",
+  memo: "",
+  start_date: "",
+  end_date: "",
 });
 const pagination = ref({
   total: 0,
@@ -204,28 +272,37 @@ const fetchEntries = async () => {
     pagination.value.pages = response.data.pages;
     pagination.value.current_page = response.data.current_page;
   } catch (error) {
-    console.error('Failed to fetch journal entries:', error);
+    console.error("Failed to fetch journal entries:", error);
   }
 };
 
 const calculateTotal = (entry) => {
   if (!entry.lines) return 0;
-  return entry.lines.reduce((sum, line) => sum + parseFloat(line.debit || 0), 0);
+  return entry.lines.reduce(
+    (sum, line) => sum + parseFloat(line.debit || 0),
+    0,
+  );
 };
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
 };
 
 const confirmDelete = async (id) => {
-  if (confirm('Are you sure you want to delete this journal entry?')) {
+  if (confirm("Are you sure you want to delete this journal entry?")) {
     try {
       await journalService.deleteJournalEntry(id);
       fetchEntries();
     } catch (error) {
-      const message = error.response?.data?.message || error.response?.data?.msg || 'Failed to delete journal entry. It might be linked to other transactions or in a closed period.';
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "Failed to delete journal entry. It might be linked to other transactions or in a closed period.";
       alert(message);
-      console.error('Delete error:', error);
+      console.error("Delete error:", error);
     }
   }
 };
@@ -251,10 +328,10 @@ const nextPage = () => {
 
 onMounted(() => {
   fetchEntries();
-  window.addEventListener('click', closeMoreMenu);
+  window.addEventListener("click", closeMoreMenu);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', closeMoreMenu);
+  window.removeEventListener("click", closeMoreMenu);
 });
 </script>

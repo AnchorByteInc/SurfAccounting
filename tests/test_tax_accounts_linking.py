@@ -10,7 +10,7 @@ from backend.models.vendor import Vendor
 from backend.models.invoice import Invoice, InvoiceLine
 from backend.models.bill import Bill, BillLine
 from backend.models.tax import Tax
-from backend.models.journal import JournalEntry, JournalEntryLine
+from backend.models.journal import JournalEntry
 from backend.services.invoice_service import post_invoice
 from backend.services.bill_service import post_bill
 
@@ -48,8 +48,6 @@ def test_tax_account_linking(app):
         default_tax_acc = Account.query.filter_by(code="2200").first()
         expense_acc = Account.query.filter_by(code="5000").first()
         sales_acc = Account.query.filter_by(code="4000").first()
-        ap_acc = Account.query.filter_by(code="2000").first()
-        ar_acc = Account.query.filter_by(code="1200").first()
 
         # Create Tax with linked accounts
         tax = Tax(
@@ -102,7 +100,7 @@ def test_tax_account_linking(app):
         assert je_bill is not None
         
         # Look for the tax line
-        tax_line = next((l for l in je_bill.lines if l.account_id == asset_tax_acc.id), None)
+        tax_line = next((line for line in je_bill.lines if line.account_id == asset_tax_acc.id), None)
         assert tax_line is not None
         assert tax_line.debit == Decimal('10.00')
         assert tax_line.credit == Decimal('0.00')
@@ -134,7 +132,7 @@ def test_tax_account_linking(app):
         assert je_inv is not None
         
         # Look for the tax line
-        tax_line_inv = next((l for l in je_inv.lines if l.account_id == liability_tax_acc.id), None)
+        tax_line_inv = next((line for line in je_inv.lines if line.account_id == liability_tax_acc.id), None)
         assert tax_line_inv is not None
         assert tax_line_inv.credit == Decimal('10.00')
         assert tax_line_inv.debit == Decimal('0.00')
@@ -160,6 +158,6 @@ def test_tax_account_linking(app):
         post_bill(bill2.id)
         
         je_bill2 = JournalEntry.query.filter_by(source_module="BILL", source_id=bill2.id).first()
-        tax_line2 = next((l for l in je_bill2.lines if l.account_id == default_tax_acc.id), None)
+        tax_line2 = next((line for line in je_bill2.lines if line.account_id == default_tax_acc.id), None)
         assert tax_line2 is not None
         assert tax_line2.debit == Decimal('5.00')

@@ -1,16 +1,13 @@
 from datetime import date
 from mcp_server.tools.invoices import (
     create_invoice,
-    get_invoices,
     get_invoice,
-    update_invoice,
-    delete_invoice,
     approve_invoice,
     void_invoice,
     get_unpaid_invoices
 )
 from mcp_server.schemas import InvoiceCreateSchema, InvoiceLineSchema
-from backend.models import Customer, Account, Invoice
+from backend.models import Customer, Account
 from backend.extensions import db
 
 def test_create_invoice():

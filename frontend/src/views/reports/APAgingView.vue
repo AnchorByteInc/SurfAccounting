@@ -15,12 +15,16 @@
     <!-- Report Content -->
     <div id="report-content" class="card p-0 overflow-hidden min-h-[600px]">
       <div class="text-center px-6 pt-12 mb-12">
-        <h2 class="text-xl font-bold uppercase tracking-widest text-on-surface">Accounts Payable Aging</h2>
+        <h2 class="text-xl font-bold uppercase tracking-widest text-on-surface">
+          Accounts Payable Aging
+        </h2>
         <p class="text-muted">As of {{ today }}</p>
       </div>
 
       <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div
+          class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"
+        ></div>
       </div>
 
       <div v-else-if="reportData" class="overflow-x-auto">
@@ -38,24 +42,52 @@
           </thead>
           <tbody>
             <tr v-for="row in reportData.by_vendor" :key="row.vendor_name">
-              <td class="whitespace-nowrap font-medium text-on-surface">{{ row.vendor_name }}</td>
-              <td class="whitespace-nowrap text-right text-on-surface">{{ formatCurrency(row.current) }}</td>
-              <td class="whitespace-nowrap text-right text-on-surface">{{ formatCurrency(row['1-30']) }}</td>
-              <td class="whitespace-nowrap text-right text-on-surface">{{ formatCurrency(row['31-60']) }}</td>
-              <td class="whitespace-nowrap text-right text-on-surface">{{ formatCurrency(row['61-90']) }}</td>
-              <td class="whitespace-nowrap text-right text-on-surface">{{ formatCurrency(row['90+']) }}</td>
-              <td class="whitespace-nowrap text-right font-bold text-on-surface">{{ formatCurrency(row.total) }}</td>
+              <td class="whitespace-nowrap font-medium text-on-surface">
+                {{ row.vendor_name }}
+              </td>
+              <td class="whitespace-nowrap text-right text-on-surface">
+                {{ formatCurrency(row.current) }}
+              </td>
+              <td class="whitespace-nowrap text-right text-on-surface">
+                {{ formatCurrency(row["1-30"]) }}
+              </td>
+              <td class="whitespace-nowrap text-right text-on-surface">
+                {{ formatCurrency(row["31-60"]) }}
+              </td>
+              <td class="whitespace-nowrap text-right text-on-surface">
+                {{ formatCurrency(row["61-90"]) }}
+              </td>
+              <td class="whitespace-nowrap text-right text-on-surface">
+                {{ formatCurrency(row["90+"]) }}
+              </td>
+              <td
+                class="whitespace-nowrap text-right font-bold text-on-surface"
+              >
+                {{ formatCurrency(row.total) }}
+              </td>
             </tr>
           </tbody>
           <tfoot class="font-bold bg-background">
             <tr>
               <td class="px-4 py-4 text-on-surface">Total</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary.current) }}</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary['1-30']) }}</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary['31-60']) }}</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary['61-90']) }}</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary['90+']) }}</td>
-              <td class="px-4 py-4 text-right text-on-surface">{{ formatCurrency(reportData.summary.total) }}</td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary.current) }}
+              </td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary["1-30"]) }}
+              </td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary["31-60"]) }}
+              </td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary["61-90"]) }}
+              </td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary["90+"]) }}
+              </td>
+              <td class="px-4 py-4 text-right text-on-surface">
+                {{ formatCurrency(reportData.summary.total) }}
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -65,37 +97,37 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { reportService } from '../../services/reportService'
+import { ref, onMounted } from "vue";
+import { reportService } from "../../services/reportService";
 
-const loading = ref(true)
-const reportData = ref(null)
-const today = new Date().toISOString().split('T')[0]
+const loading = ref(true);
+const reportData = ref(null);
+const today = new Date().toISOString().split("T")[0];
 
 const fetchReport = async () => {
-  loading.value = true
+  loading.value = true;
   try {
-    const response = await reportService.getAPAging()
-    reportData.value = response.data
+    const response = await reportService.getAPAging();
+    reportData.value = response.data;
   } catch (error) {
-    console.error('Error fetching A/P aging:', error)
+    console.error("Error fetching A/P aging:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(value)
-}
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
+};
 
 const exportPDF = () => {
-  reportService.exportToPDF('report-content', `AP-Aging-${today}.pdf`)
-}
+  reportService.exportToPDF("report-content", `AP-Aging-${today}.pdf`);
+};
 
 onMounted(() => {
-  fetchReport()
-})
+  fetchReport();
+});
 </script>

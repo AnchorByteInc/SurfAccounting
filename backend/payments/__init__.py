@@ -35,7 +35,7 @@ def create_payment():
         try:
             created = apply_payment(amount=amount, date_paid=date_paid, customer_id=customer_id, invoice_id=invoice_id, method=method, account_id=account_id)
             db.session.commit()
-        except ValueError as ve:
+        except ValueError:
             # Fallback path: create plain payment record (keeps API CRUD behavior for minimal fixtures)
             new_payment = payment_schema.load(json_data)
             db.session.add(new_payment)
@@ -142,7 +142,7 @@ def create_vendor_payment():
         try:
             created = apply_vendor_payment(amount=amount, date_paid=date_paid, vendor_id=vendor_id, bill_id=bill_id, method=method, account_id=account_id)
             db.session.commit()
-        except ValueError as ve:
+        except ValueError:
             new_payment = vendor_payment_schema.load(json_data)
             db.session.add(new_payment)
             db.session.commit()

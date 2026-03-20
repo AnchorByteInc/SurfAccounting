@@ -1,7 +1,6 @@
 from sqlalchemy import event
 from ..extensions import db
 from .base import BaseModel
-from .tax import Tax, invoice_line_taxes
 from decimal import Decimal
 
 class Invoice(db.Model, BaseModel):
@@ -39,7 +38,7 @@ class Invoice(db.Model, BaseModel):
                     lines_to_sum.append(obj)
                     
         # Exclude lines that are about to be deleted
-        lines_to_sum = [l for l in lines_to_sum if l not in db.session.deleted]
+        lines_to_sum = [line for line in lines_to_sum if line not in db.session.deleted]
 
         # If there are no lines but a positive total was already set (e.g., imported or preset invoice),
         # preserve existing totals and only recalculate balance from payments.

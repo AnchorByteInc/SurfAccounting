@@ -20,7 +20,8 @@
       <div class="card card-hover flex flex-col">
         <h3 class="mb-2">Balance Sheet</h3>
         <p class="text-sm text-muted mb-6 flex-1">
-          A snapshot of your assets, liabilities, and equity at a specific point in time.
+          A snapshot of your assets, liabilities, and equity at a specific point
+          in time.
         </p>
         <RouterLink
           to="/reports/balance-sheet"
@@ -35,7 +36,8 @@
       <div class="card card-hover flex flex-col">
         <h3 class="mb-2">Statement of Cash Flows</h3>
         <p class="text-sm text-muted mb-6 flex-1">
-          Shows how changes in balance sheet and income affect cash and cash equivalents.
+          Shows how changes in balance sheet and income affect cash and cash
+          equivalents.
         </p>
         <RouterLink
           to="/reports/cash-flow"
@@ -50,7 +52,8 @@
       <div class="card card-hover flex flex-col">
         <h3 class="mb-2">Accounts Receivable Aging</h3>
         <p class="text-sm text-muted mb-6 flex-1">
-          Summarizes your unpaid customer invoices by how long they have been outstanding.
+          Summarizes your unpaid customer invoices by how long they have been
+          outstanding.
         </p>
         <RouterLink
           to="/reports/ar-aging"
@@ -65,7 +68,8 @@
       <div class="card card-hover flex flex-col">
         <h3 class="mb-2">Accounts Payable Aging</h3>
         <p class="text-sm text-muted mb-6 flex-1">
-          Summarizes your unpaid bills from vendors by how long they have been outstanding.
+          Summarizes your unpaid bills from vendors by how long they have been
+          outstanding.
         </p>
         <RouterLink
           to="/reports/ap-aging"
@@ -80,7 +84,8 @@
       <div class="card card-hover flex flex-col">
         <h3 class="mb-2">Balance Verification</h3>
         <p class="text-sm text-muted mb-6 flex-1">
-          Perform accounting integrity checks to ensure your books are in balance.
+          Perform accounting integrity checks to ensure your books are in
+          balance.
         </p>
         <RouterLink
           to="/reports/integrity-check"
@@ -95,5 +100,5 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from "vue-router";
 </script>

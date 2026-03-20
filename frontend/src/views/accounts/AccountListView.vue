@@ -18,12 +18,15 @@
           >
             <span class="material-icons">more_vert</span>
           </button>
-          <div 
+          <div
             v-if="showMoreMenu"
             class="absolute right-0 mt-1 w-48 bg-white rounded-[14px] shadow-lg border border-gray-100 py-1 z-50"
           >
-            <button 
-              @click="showImportModal = true; showMoreMenu = false"
+            <button
+              @click="
+                showImportModal = true;
+                showMoreMenu = false;
+              "
               class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary/5 flex items-center gap-2"
             >
               <span class="material-icons text-[18px]">upload_file</span>
@@ -34,11 +37,18 @@
       </div>
     </Teleport>
 
-    <BulkImportModal 
+    <BulkImportModal
       :is-open="showImportModal"
       title="Bulk Import Chart of Accounts"
       upload-url="/accounts/bulk-import"
-      :template-fields="['name', 'code', 'type', 'subtype', 'parent_code', 'is_active']"
+      :template-fields="[
+        'name',
+        'code',
+        'type',
+        'subtype',
+        'parent_code',
+        'is_active',
+      ]"
       @close="showImportModal = false"
       @success="fetchAccounts"
     />
@@ -58,7 +68,11 @@
         </thead>
         <tbody>
           <template v-for="account in rootAccounts" :key="account.id">
-            <AccountRow :account="account" :level="0" @refresh="fetchAccounts" />
+            <AccountRow
+              :account="account"
+              :level="0"
+              @refresh="fetchAccounts"
+            />
           </template>
           <tr v-if="accounts.length === 0">
             <td colspan="6" class="px-6 py-10 text-center text-muted">
@@ -72,11 +86,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import accountService from '../../services/accountService';
-import AccountRow from './AccountRow.vue';
-import BulkImportModal from '../../components/BulkImportModal.vue';
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
+import accountService from "../../services/accountService";
+import AccountRow from "./AccountRow.vue";
+import BulkImportModal from "../../components/BulkImportModal.vue";
 
 const router = useRouter();
 const accounts = ref([]);
@@ -97,18 +111,18 @@ const fetchAccounts = async () => {
     const response = await accountService.getAccounts({ per_page: 1000 });
     accounts.value = response.data.accounts;
   } catch (error) {
-    console.error('Failed to fetch accounts:', error);
+    console.error("Failed to fetch accounts:", error);
   }
 };
 
 const rootAccounts = computed(() => {
   const accountMap = {};
-  accounts.value.forEach(acc => {
+  accounts.value.forEach((acc) => {
     accountMap[acc.id] = { ...acc, children: [] };
   });
 
   const roots = [];
-  accounts.value.forEach(acc => {
+  accounts.value.forEach((acc) => {
     if (acc.parent_id && accountMap[acc.parent_id]) {
       accountMap[acc.parent_id].children.push(accountMap[acc.id]);
     } else {
@@ -119,7 +133,7 @@ const rootAccounts = computed(() => {
   // Sort by code
   const sortAccounts = (list) => {
     list.sort((a, b) => a.code.localeCompare(b.code));
-    list.forEach(acc => {
+    list.forEach((acc) => {
       if (acc.children.length > 0) {
         sortAccounts(acc.children);
       }
@@ -132,10 +146,10 @@ const rootAccounts = computed(() => {
 
 onMounted(() => {
   fetchAccounts();
-  window.addEventListener('click', closeMoreMenu);
+  window.addEventListener("click", closeMoreMenu);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', closeMoreMenu);
+  window.removeEventListener("click", closeMoreMenu);
 });
 </script>

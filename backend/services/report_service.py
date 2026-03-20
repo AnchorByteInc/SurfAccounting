@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from sqlalchemy import func
 from ..extensions import db
 from ..models.account import Account
@@ -203,7 +203,6 @@ def get_cash_flow(start_date, end_date):
         )
     ).all()
     
-    operating_cash = Decimal('0.00')
     # For a truly simplified Cash Flow statement, we'll just show the movement in Cash accounts.
     # But a real one starts with Net Income and adjusts for non-cash items.
     

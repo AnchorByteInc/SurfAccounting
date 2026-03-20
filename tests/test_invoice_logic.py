@@ -9,7 +9,7 @@ from backend.models.customer import Customer
 from backend.models.invoice import Invoice, InvoiceLine
 from backend.models.tax import Tax
 from backend.models.settings import Settings
-from backend.models.journal import JournalEntry, JournalEntryLine
+from backend.models.journal import JournalEntry
 from backend.services.invoice_service import post_invoice
 
 class TestConfig(Config):
@@ -177,9 +177,9 @@ def test_post_invoice(app):
         # Credit: Revenue (100.00)
         # Credit: Tax Payable (5.00)
         
-        ar_line = [l for l in journal_entry.lines if l.account_id == ar_account.id][0]
-        rev_line = [l for l in journal_entry.lines if l.account_id == rev_account.id][0]
-        tax_line = [l for l in journal_entry.lines if l.account_id == tax_account.id][0]
+        ar_line = [line for line in journal_entry.lines if line.account_id == ar_account.id][0]
+        rev_line = [line for line in journal_entry.lines if line.account_id == rev_account.id][0]
+        tax_line = [line for line in journal_entry.lines if line.account_id == tax_account.id][0]
         
         assert ar_line.debit == Decimal('105.00')
         assert ar_line.credit == Decimal('0.00')

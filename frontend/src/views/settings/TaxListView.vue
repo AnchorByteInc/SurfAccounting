@@ -26,21 +26,31 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="tax in taxes" 
+          <tr
+            v-for="tax in taxes"
             :key="tax.id"
             @click="editTax(tax.id)"
             class="cursor-pointer hover:bg-primary/8"
           >
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ tax.name }}</td>
-            <td class="whitespace-nowrap text-muted">{{ (Number(tax.rate) * 100).toFixed(2) }}%</td>
-            <td class="text-muted truncate max-w-xs">{{ tax.description || '-' }}</td>
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ tax.name }}
+            </td>
+            <td class="whitespace-nowrap text-muted">
+              {{ (Number(tax.rate) * 100).toFixed(2) }}%
+            </td>
+            <td class="text-muted truncate max-w-xs">
+              {{ tax.description || "-" }}
+            </td>
             <td class="whitespace-nowrap">
-              <span 
+              <span
                 class="px-2 py-1 rounded-full text-xs font-bold"
-                :class="tax.is_active ? 'bg-success/20 text-success' : 'bg-error/20 text-error'"
+                :class="
+                  tax.is_active
+                    ? 'bg-success/20 text-success'
+                    : 'bg-error/20 text-error'
+                "
               >
-                {{ tax.is_active ? 'Active' : 'Inactive' }}
+                {{ tax.is_active ? "Active" : "Inactive" }}
               </span>
             </td>
             <td class="whitespace-nowrap text-right">
@@ -72,10 +82,15 @@
       </table>
 
       <!-- Pagination -->
-      <div v-if="totalPages > 1" class="px-6 py-4 flex items-center justify-between border-t border-divider">
+      <div
+        v-if="totalPages > 1"
+        class="px-6 py-4 flex items-center justify-between border-t border-divider"
+      >
         <div>
           <p class="text-sm text-muted">
-            Showing page <span class="font-bold text-on-surface">{{ currentPage }}</span> of <span class="font-bold text-on-surface">{{ totalPages }}</span>
+            Showing page
+            <span class="font-bold text-on-surface">{{ currentPage }}</span> of
+            <span class="font-bold text-on-surface">{{ totalPages }}</span>
           </p>
         </div>
         <div>
@@ -85,7 +100,11 @@
               :key="p"
               @click="changePage(p)"
               class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold transition-colors"
-              :class="p === currentPage ? 'bg-primary text-white' : 'text-muted hover:bg-primary/8'"
+              :class="
+                p === currentPage
+                  ? 'bg-primary text-white'
+                  : 'text-muted hover:bg-primary/8'
+              "
             >
               {{ p }}
             </button>
@@ -97,9 +116,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import taxService from '../../services/taxService';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import taxService from "../../services/taxService";
 
 const router = useRouter();
 const taxes = ref([]);
@@ -110,13 +129,13 @@ const fetchTaxes = async () => {
   try {
     const response = await taxService.getTaxes({
       page: currentPage.value,
-      per_page: 10
+      per_page: 10,
     });
     taxes.value = response.data.taxes;
     totalPages.value = response.data.pages;
     currentPage.value = response.data.current_page;
   } catch (error) {
-    console.error('Failed to fetch taxes:', error);
+    console.error("Failed to fetch taxes:", error);
   }
 };
 
@@ -136,8 +155,8 @@ const confirmDelete = async (tax) => {
       await taxService.deleteTax(tax.id);
       fetchTaxes();
     } catch (error) {
-      console.error('Failed to delete tax:', error);
-      alert('Failed to delete tax. It may be in use.');
+      console.error("Failed to delete tax:", error);
+      alert("Failed to delete tax. It may be in use.");
     }
   }
 };

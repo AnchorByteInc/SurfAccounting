@@ -74,13 +74,20 @@ def update_customer(id: int, name: str = None, email: str = None, phone: str = N
     Update an existing customer record by ID.
     """
     updates = {}
-    if name is not None: updates['name'] = name
-    if email is not None: updates['email'] = email
-    if phone is not None: updates['phone'] = phone
-    if primary_contact_name is not None: updates['primary_contact_name'] = primary_contact_name
-    if website is not None: updates['website'] = website
-    if billing_address is not None: updates['billing_address'] = billing_address
-    if shipping_address is not None: updates['shipping_address'] = shipping_address
+    if name is not None:
+        updates['name'] = name
+    if email is not None:
+        updates['email'] = email
+    if phone is not None:
+        updates['phone'] = phone
+    if primary_contact_name is not None:
+        updates['primary_contact_name'] = primary_contact_name
+    if website is not None:
+        updates['website'] = website
+    if billing_address is not None:
+        updates['billing_address'] = billing_address
+    if shipping_address is not None:
+        updates['shipping_address'] = shipping_address
     
     if not updates:
         return "No valid fields provided for update."

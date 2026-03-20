@@ -26,22 +26,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="user in users" 
-            :key="user.id"
-            class="hover:bg-primary/8"
-          >
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ user.username }}</td>
+          <tr v-for="user in users" :key="user.id" class="hover:bg-primary/8">
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ user.username }}
+            </td>
             <td class="whitespace-nowrap text-muted">{{ user.email }}</td>
             <td class="whitespace-nowrap">
-              <span v-if="user.is_admin" class="material-icons text-primary text-[20px]">check_circle</span>
+              <span
+                v-if="user.is_admin"
+                class="material-icons text-primary text-[20px]"
+                >check_circle</span
+              >
             </td>
             <td class="whitespace-nowrap">
-              <span 
+              <span
                 class="px-2 py-1 rounded-full text-xs font-bold"
-                :class="user.is_active ? 'bg-success/20 text-success' : 'bg-error/20 text-error'"
+                :class="
+                  user.is_active
+                    ? 'bg-success/20 text-success'
+                    : 'bg-error/20 text-error'
+                "
               >
-                {{ user.is_active ? 'Active' : 'Inactive' }}
+                {{ user.is_active ? "Active" : "Inactive" }}
               </span>
             </td>
             <td class="whitespace-nowrap text-right">
@@ -69,10 +75,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import userService from '../../services/userService';
-import { useAuthStore } from '../../stores/auth';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import userService from "../../services/userService";
+import { useAuthStore } from "../../stores/auth";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -83,7 +89,7 @@ const fetchUsers = async () => {
     const response = await userService.getUsers();
     users.value = response.data;
   } catch (error) {
-    console.error('Failed to fetch users:', error);
+    console.error("Failed to fetch users:", error);
   }
 };
 
@@ -97,8 +103,8 @@ const confirmDelete = async (user) => {
       await userService.deleteUser(user.id);
       fetchUsers();
     } catch (error) {
-      console.error('Failed to delete user:', error);
-      alert('Failed to delete user.');
+      console.error("Failed to delete user:", error);
+      alert("Failed to delete user.");
     }
   }
 };

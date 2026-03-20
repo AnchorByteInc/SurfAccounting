@@ -110,7 +110,7 @@ def test_get_bill_lines_filtering(client, auth_headers, setup_data, app):
         db.session.commit()
     
     # Filter by description
-    response = client.get(f'/api/bill_lines?description=Specific', headers=auth_headers)
+    response = client.get('/api/bill_lines?description=Specific', headers=auth_headers)
     assert response.status_code == 200
     json_data = response.get_json()
     assert len(json_data['bill_lines']) == 1

@@ -7,8 +7,7 @@ from backend.extensions import db
 from backend.models.account import Account
 from backend.models.customer import Customer
 from backend.models.invoice import Invoice, InvoiceLine
-from backend.models.journal import JournalEntry, JournalEntryLine
-from backend.models.payment import Payment
+from backend.models.journal import JournalEntry
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
@@ -124,8 +123,8 @@ def test_payment_gl_sync(app):
         assert journal is not None
         
         # Check lines
-        cash_line = [l for l in journal.lines if l.account_id == cash_acc.id][0]
-        ar_line = [l for l in journal.lines if l.account_id == ar_acc.id][0]
+        cash_line = [line for line in journal.lines if line.account_id == cash_acc.id][0]
+        ar_line = [line for line in journal.lines if line.account_id == ar_acc.id][0]
         
         assert cash_line.debit == Decimal('100.00')
         assert ar_line.credit == Decimal('100.00')

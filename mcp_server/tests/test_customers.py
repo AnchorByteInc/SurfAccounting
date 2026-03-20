@@ -6,8 +6,6 @@ from mcp_server.tools.customers import (
     delete_customer
 )
 from mcp_server.schemas import CustomerCreateSchema
-from backend.models import Customer
-from backend.extensions import db
 
 def test_create_customer():
     schema = CustomerCreateSchema(name="Test Customer", email="test@example.com")

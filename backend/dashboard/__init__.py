@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from sqlalchemy import func
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from ..extensions import db
 from ..models.invoice import Invoice
 from ..models.bill import Bill

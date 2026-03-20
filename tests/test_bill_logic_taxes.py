@@ -124,8 +124,8 @@ def test_post_bill_with_taxes(app):
         # Credits: AP (110.00)
         # Debits: Expense (110.00) - (100.00 line + 10.00 tax)
         
-        ap_lines = [l for l in journal_entry.lines if l.account_id == ap_account.id]
-        expense_lines = [l for l in journal_entry.lines if l.account_id == expense_account.id]
+        ap_lines = [line for line in journal_entry.lines if line.account_id == ap_account.id]
+        expense_lines = [line for line in journal_entry.lines if line.account_id == expense_account.id]
         
         assert ap_lines[0].credit == Decimal('110.00')
-        assert sum(l.debit for l in expense_lines) == Decimal('110.00')
+        assert sum(line.debit for line in expense_lines) == Decimal('110.00')

@@ -1,5 +1,5 @@
 import pytest
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
 from backend.app import create_app
 from backend.config import Config
@@ -119,7 +119,7 @@ def test_9_2_2_invoice_posting_entries(app):
         db.session.commit()
         
         # Post invoice: Subtotal 200, Tax (10%) 20, Total 220
-        posted_invoice = post_invoice(invoice.id)
+        post_invoice(invoice.id)
         
         # Check journal entry
         je = JournalEntry.query.filter_by(reference="INV-INV-922").first()
@@ -130,9 +130,9 @@ def test_9_2_2_invoice_posting_entries(app):
         # Debit AR: 220
         # Credit Sales: 200
         # Credit Tax: 20
-        ar_line = next(l for l in je.lines if l.account_id == ar_acc.id)
-        sales_line = next(l for l in je.lines if l.account_id == sales_acc.id)
-        tax_line = next(l for l in je.lines if l.account_id == tax_acc.id)
+        ar_line = next(line for line in je.lines if line.account_id == ar_acc.id)
+        sales_line = next(line for line in je.lines if line.account_id == sales_acc.id)
+        tax_line = next(line for line in je.lines if line.account_id == tax_acc.id)
         
         assert ar_line.debit == Decimal('220.00')
         assert sales_line.credit == Decimal('200.00')
@@ -150,7 +150,6 @@ def test_9_2_3_payment_journal_entries(app):
         cash_acc = Account.query.filter_by(code="1000").first()
         ar_acc = Account.query.filter_by(code="1200").first()
         ap_acc = Account.query.filter_by(code="2000").first()
-        rent_acc = Account.query.filter_by(code="5300").first()
         
         # 1. Customer Payment
         invoice = Invoice(
@@ -183,8 +182,8 @@ def test_9_2_3_payment_journal_entries(app):
         assert je_pay.is_balanced() is True
         
         # Debit Cash: 100, Credit AR: 100
-        cash_line = next(l for l in je_pay.lines if l.account_id == cash_acc.id)
-        ar_line = next(l for l in je_pay.lines if l.account_id == ar_acc.id)
+        cash_line = next(line for line in je_pay.lines if line.account_id == cash_acc.id)
+        ar_line = next(line for line in je_pay.lines if line.account_id == ar_acc.id)
         assert cash_line.debit == Decimal('100.00')
         assert ar_line.credit == Decimal('100.00')
         
@@ -218,8 +217,8 @@ def test_9_2_3_payment_journal_entries(app):
         assert je_vpay.is_balanced() is True
         
         # Debit AP: 500, Credit Cash: 500
-        ap_line = next(l for l in je_vpay.lines if l.account_id == ap_acc.id)
-        cash_line_v = next(l for l in je_vpay.lines if l.account_id == cash_acc.id)
+        ap_line = next(line for line in je_vpay.lines if line.account_id == ap_acc.id)
+        cash_line_v = next(line for line in je_vpay.lines if line.account_id == cash_acc.id)
         assert ap_line.debit == Decimal('500.00')
         assert cash_line_v.credit == Decimal('500.00')
 
@@ -231,8 +230,6 @@ def test_9_2_4_balance_sheet_integrity(app):
         cash_acc = Account.query.filter_by(code="1000").first()
         sales_acc = Account.query.filter_by(code="4000").first()
         rent_acc = Account.query.filter_by(code="5300").first()
-        ar_acc = Account.query.filter_by(code="1200").first()
-        ap_acc = Account.query.filter_by(code="2000").first()
         
         # Initial state: everything 0.
         bs = report_service.get_balance_sheet(date.today())

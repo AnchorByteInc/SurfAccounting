@@ -78,7 +78,7 @@
 
         <div class="pt-4 border-t border-divider">
           <h3 class="text-lg font-bold mb-4">Branding Logos</h3>
-          
+
           <div class="space-y-6">
             <div>
               <label class="form-label">App Logo</label>
@@ -87,17 +87,22 @@
                   type="file"
                   accept="image/*"
                   @change="handleFileUpload($event, 'app_logo_url')"
-                  class="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-primary/10 file:text-primary
-                    hover:file:bg-primary/20"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                 />
-                <p class="text-xs text-muted">Recommended: Horizontal format. This logo appears on your PDFs.</p>
-                <div v-if="settings.app_logo_url" class="relative group mt-2 p-4 border rounded bg-gray-50 flex justify-center items-center h-32 overflow-hidden">
-                  <img :src="getFullImageUrl(settings.app_logo_url)" alt="App Logo Preview" class="max-h-full max-w-full object-contain" />
-                  <button 
+                <p class="text-xs text-muted">
+                  Recommended: Horizontal format. This logo appears on your
+                  PDFs.
+                </p>
+                <div
+                  v-if="settings.app_logo_url"
+                  class="relative group mt-2 p-4 border rounded bg-gray-50 flex justify-center items-center h-32 overflow-hidden"
+                >
+                  <img
+                    :src="getFullImageUrl(settings.app_logo_url)"
+                    alt="App Logo Preview"
+                    class="max-h-full max-w-full object-contain"
+                  />
+                  <button
                     type="button"
                     @click="settings.app_logo_url = ''"
                     class="absolute top-2 right-2 p-1 bg-white/80 rounded-full shadow hover:bg-white text-error"
@@ -116,17 +121,21 @@
                   type="file"
                   accept="image/*"
                   @change="handleFileUpload($event, 'invoice_logo_url')"
-                  class="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-primary/10 file:text-primary
-                    hover:file:bg-primary/20"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                 />
-                <p class="text-xs text-muted">Recommended: 1:1 or 2:1 aspect ratio. PNG or SVG preferred.</p>
-                <div v-if="settings.invoice_logo_url" class="relative group mt-2 p-4 border rounded bg-gray-50 flex justify-center items-center h-48 overflow-hidden">
-                  <img :src="getFullImageUrl(settings.invoice_logo_url)" alt="Invoice Logo Preview" class="max-h-full max-w-full object-contain" />
-                  <button 
+                <p class="text-xs text-muted">
+                  Recommended: 1:1 or 2:1 aspect ratio. PNG or SVG preferred.
+                </p>
+                <div
+                  v-if="settings.invoice_logo_url"
+                  class="relative group mt-2 p-4 border rounded bg-gray-50 flex justify-center items-center h-48 overflow-hidden"
+                >
+                  <img
+                    :src="getFullImageUrl(settings.invoice_logo_url)"
+                    alt="Invoice Logo Preview"
+                    class="max-h-full max-w-full object-contain"
+                  />
+                  <button
                     type="button"
                     @click="settings.invoice_logo_url = ''"
                     class="absolute top-2 right-2 p-1 bg-white/80 rounded-full shadow hover:bg-white text-error"
@@ -141,19 +150,17 @@
         </div>
 
         <div class="pt-6 flex justify-end gap-3">
-          <button
-            type="button"
-            @click="router.back()"
-            class="btn-secondary"
-          >
+          <button type="button" @click="router.back()" class="btn-secondary">
             Cancel
           </button>
-          <button
-            type="submit"
-            :disabled="submitting"
-            class="btn-primary"
-          >
-            {{ submitting ? 'Saving...' : (settingsId ? 'Save Changes' : 'Create Settings') }}
+          <button type="submit" :disabled="submitting" class="btn-primary">
+            {{
+              submitting
+                ? "Saving..."
+                : settingsId
+                  ? "Save Changes"
+                  : "Create Settings"
+            }}
           </button>
         </div>
       </form>
@@ -162,25 +169,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import settingsService from '../../services/settingsService';
-import { getFullImageUrl } from '../../utils/imageUtils';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import settingsService from "../../services/settingsService";
+import { getFullImageUrl } from "../../utils/imageUtils";
 
 const router = useRouter();
 const submitting = ref(false);
 const settingsId = ref(null);
 
 const settings = ref({
-  business_name: '',
-  address: '',
-  city: '',
-  state: '',
-  zip: '',
-  email: '',
-  default_currency: 'USD',
-  app_logo_url: '',
-  invoice_logo_url: ''
+  business_name: "",
+  address: "",
+  city: "",
+  state: "",
+  zip: "",
+  email: "",
+  default_currency: "USD",
+  app_logo_url: "",
+  invoice_logo_url: "",
 });
 
 const fetchSettings = async () => {
@@ -189,20 +196,20 @@ const fetchSettings = async () => {
     if (response.data.settings && response.data.settings.length > 0) {
       const s = response.data.settings[0];
       settings.value = {
-        business_name: s.business_name || '',
-        address: s.address || '',
-        city: s.city || '',
-        state: s.state || '',
-        zip: s.zip || '',
-        email: s.email || '',
-        default_currency: s.default_currency || 'USD',
-        app_logo_url: s.app_logo_url || '',
-        invoice_logo_url: s.invoice_logo_url || ''
+        business_name: s.business_name || "",
+        address: s.address || "",
+        city: s.city || "",
+        state: s.state || "",
+        zip: s.zip || "",
+        email: s.email || "",
+        default_currency: s.default_currency || "USD",
+        app_logo_url: s.app_logo_url || "",
+        invoice_logo_url: s.invoice_logo_url || "",
       };
       settingsId.value = s.id;
     }
   } catch (error) {
-    console.error('Failed to fetch settings:', error);
+    console.error("Failed to fetch settings:", error);
   }
 };
 
@@ -211,14 +218,14 @@ const handleFileUpload = async (event, field) => {
   if (!file) return;
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
 
   try {
     const response = await settingsService.uploadLogo(formData);
     settings.value[field] = response.data.url;
   } catch (error) {
-    console.error('Upload failed:', error);
-    alert('Failed to upload image.');
+    console.error("Upload failed:", error);
+    alert("Failed to upload image.");
   }
 };
 
@@ -230,17 +237,17 @@ const saveSettings = async () => {
     } else {
       await settingsService.createSettings(settings.value);
     }
-    router.push('/settings');
+    router.push("/settings");
   } catch (error) {
-    console.error('Failed to save settings:', error);
-    alert('Failed to save settings.');
+    console.error("Failed to save settings:", error);
+    alert("Failed to save settings.");
   } finally {
     submitting.value = false;
   }
 };
 
 const handleImageError = (e) => {
-  console.warn('Invalid image URL:', e.target.src);
+  console.warn("Invalid image URL:", e.target.src);
 };
 
 onMounted(() => {

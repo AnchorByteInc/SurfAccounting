@@ -1,16 +1,13 @@
 from datetime import date
 from mcp_server.tools.bills import (
     create_bill,
-    get_bills,
     get_bill,
-    update_bill,
-    delete_bill,
     approve_bill,
     void_bill,
     get_unpaid_bills
 )
 from mcp_server.schemas import BillCreateSchema, BillLineSchema
-from backend.models import Vendor, Account, Bill
+from backend.models import Vendor, Account
 from backend.extensions import db
 
 def test_create_bill():

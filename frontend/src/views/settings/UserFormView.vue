@@ -14,7 +14,7 @@
             placeholder="Enter username"
           />
         </div>
-        
+
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -46,7 +46,9 @@
             type="checkbox"
             class="rounded text-primary focus:ring-primary"
           />
-          <label for="is_admin" class="text-sm font-medium">Administrator Access</label>
+          <label for="is_admin" class="text-sm font-medium"
+            >Administrator Access</label
+          >
         </div>
 
         <div class="flex justify-end gap-3 pt-4">
@@ -62,7 +64,7 @@
             class="px-6 py-2 rounded-full bg-primary text-white font-medium hover:opacity-90 disabled:opacity-50"
             :disabled="submitting"
           >
-            {{ submitting ? 'Saving...' : 'Create User' }}
+            {{ submitting ? "Saving..." : "Create User" }}
           </button>
         </div>
       </form>
@@ -71,29 +73,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import userService from '../../services/userService';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import userService from "../../services/userService";
 
 const router = useRouter();
 const submitting = ref(false);
 
 const user = ref({
-  username: '',
-  email: '',
-  password: '',
+  username: "",
+  email: "",
+  password: "",
   is_admin: false,
-  is_active: true
+  is_active: true,
 });
 
 const handleSubmit = async () => {
   submitting.value = true;
   try {
     await userService.createUser(user.value);
-    router.push('/settings/users');
+    router.push("/settings/users");
   } catch (error) {
-    console.error('Failed to create user:', error);
-    alert(error.response?.data?.message || 'Failed to create user.');
+    console.error("Failed to create user:", error);
+    alert(error.response?.data?.message || "Failed to create user.");
   } finally {
     submitting.value = false;
   }

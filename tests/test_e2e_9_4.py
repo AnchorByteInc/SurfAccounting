@@ -80,7 +80,6 @@ def test_9_4_1_full_invoice_lifecycle(app, client, auth_headers):
         tax_id = Tax.query.filter_by(name="Tax").first().id
         
         sales_acc = Account.query.filter_by(code="4000").first()
-        ar_acc = Account.query.filter_by(code="1200").first()
         cash_acc = Account.query.filter_by(code="1000").first()
         
         # 2. Create Draft Invoice via API
@@ -121,7 +120,7 @@ def test_9_4_1_full_invoice_lifecycle(app, client, auth_headers):
         
         # 4. Apply Payment (Since API create_payment lacks service call, we use service)
         # Note: If we use the API /api/payments, it won't trigger apply_payment logic currently.
-        payment = apply_payment(
+        apply_payment(
             amount=Decimal('220.00'),
             date_paid=date.today(),
             customer_id=customer_id,
@@ -150,8 +149,6 @@ def test_9_4_2_full_bill_lifecycle(app, client, auth_headers):
         vendor_id = vendor_resp.get_json()['id']
         
         rent_acc = Account.query.filter_by(code="5300").first()
-        ap_acc = Account.query.filter_by(code="2000").first()
-        cash_acc = Account.query.filter_by(code="1000").first()
         
         # 2. Create Draft Bill via API
         bill_data = {
@@ -187,7 +184,7 @@ def test_9_4_2_full_bill_lifecycle(app, client, auth_headers):
         assert je is not None
         
         # 4. Apply Vendor Payment (Using service)
-        vpayment = apply_vendor_payment(
+        apply_vendor_payment(
             amount=Decimal('500.00'),
             date_paid=date.today(),
             vendor_id=vendor_id,
@@ -208,12 +205,9 @@ def test_9_4_3_financial_statements_validation(app):
     with app.app_context():
         # Setup data manually to ensure we know the expected results
         cash_acc = Account.query.filter_by(code="1000").first()
-        ar_acc = Account.query.filter_by(code="1200").first()
-        ap_acc = Account.query.filter_by(code="2000").first()
         sales_acc = Account.query.filter_by(code="4000").first()
         rent_acc = Account.query.filter_by(code="5300").first()
         equity_acc = Account.query.filter_by(code="3000").first()
-        tax_acc = Account.query.filter_by(code="2200").first()
         
         customer = Customer(name="Statement Customer")
         vendor = Vendor(name="Statement Vendor")

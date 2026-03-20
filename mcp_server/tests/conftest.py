@@ -7,10 +7,9 @@ root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from flask import Flask
-from backend.extensions import db
-from backend.config import Config
-import mcp_server.utils.db
+from backend.extensions import db  # noqa: E402
+from backend.config import Config  # noqa: E402
+import mcp_server.utils.db  # noqa: E402
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
@@ -27,7 +26,6 @@ def setup_test_app():
     mcp_server.utils.db.app = test_app
     
     # Import all models to ensure they are registered with SQLAlchemy
-    from backend import models
     
     with test_app.app_context():
         db.create_all()

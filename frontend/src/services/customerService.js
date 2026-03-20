@@ -1,14 +1,14 @@
-import api from './api';
+import api from "./api";
 
 export default {
   getCustomers(params) {
-    return api.get('/customers', { params });
+    return api.get("/customers", { params });
   },
   getCustomer(id) {
     return api.get(`/customers/${id}`);
   },
   createCustomer(data) {
-    return api.post('/customers', data);
+    return api.post("/customers", data);
   },
   updateCustomer(id, data) {
     return api.put(`/customers/${id}`, data);

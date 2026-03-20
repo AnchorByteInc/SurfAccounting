@@ -22,7 +22,7 @@ class AccountingPeriod(db.Model, BaseModel):
         period = cls.query.filter(
             cls.start_date <= check_date,
             cls.end_date >= check_date,
-            cls.is_closed == True
+            cls.is_closed
         ).first()
         
         return period is not None

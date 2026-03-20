@@ -70,11 +70,16 @@ def update_vendor(id: int, name: str = None, email: str = None, phone: str = Non
     Update an existing vendor record by ID.
     """
     updates = {}
-    if name is not None: updates['name'] = name
-    if email is not None: updates['email'] = email
-    if phone is not None: updates['phone'] = phone
-    if primary_contact_name is not None: updates['primary_contact_name'] = primary_contact_name
-    if address is not None: updates['address'] = address
+    if name is not None:
+        updates['name'] = name
+    if email is not None:
+        updates['email'] = email
+    if phone is not None:
+        updates['phone'] = phone
+    if primary_contact_name is not None:
+        updates['primary_contact_name'] = primary_contact_name
+    if address is not None:
+        updates['address'] = address
     
     if not updates:
         return "No valid fields provided for update."

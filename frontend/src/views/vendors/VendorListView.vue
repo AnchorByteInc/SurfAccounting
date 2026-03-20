@@ -18,12 +18,15 @@
           >
             <span class="material-icons">more_vert</span>
           </button>
-          <div 
+          <div
             v-if="showMoreMenu"
             class="absolute right-0 mt-1 w-48 bg-white rounded-[14px] shadow-lg border border-gray-100 py-1 z-50"
           >
-            <button 
-              @click="showImportModal = true; showMoreMenu = false"
+            <button
+              @click="
+                showImportModal = true;
+                showMoreMenu = false;
+              "
               class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary/5 flex items-center gap-2"
             >
               <span class="material-icons text-[18px]">upload_file</span>
@@ -34,11 +37,17 @@
       </div>
     </Teleport>
 
-    <BulkImportModal 
+    <BulkImportModal
       :is-open="showImportModal"
       title="Bulk Import Vendors"
       upload-url="/vendors/bulk-import"
-      :template-fields="['name', 'primary_contact_name', 'email', 'phone', 'address']"
+      :template-fields="[
+        'name',
+        'primary_contact_name',
+        'email',
+        'phone',
+        'address',
+      ]"
       @close="showImportModal = false"
       @success="fetchVendors"
     />
@@ -81,17 +90,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="vendor in vendors" 
+          <tr
+            v-for="vendor in vendors"
             :key="vendor.id"
             @click="editVendor(vendor.id)"
             class="cursor-pointer hover:bg-primary/8"
           >
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ vendor.name }}</td>
-            <td class="whitespace-nowrap text-muted">{{ vendor.primary_contact_name || '-' }}</td>
-            <td class="whitespace-nowrap text-muted">{{ vendor.email || '-' }}</td>
-            <td class="whitespace-nowrap text-muted">{{ vendor.phone || '-' }}</td>
-            <td class="whitespace-nowrap font-bold text-right">${{ Number(vendor.balance).toFixed(2) }}</td>
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ vendor.name }}
+            </td>
+            <td class="whitespace-nowrap text-muted">
+              {{ vendor.primary_contact_name || "-" }}
+            </td>
+            <td class="whitespace-nowrap text-muted">
+              {{ vendor.email || "-" }}
+            </td>
+            <td class="whitespace-nowrap text-muted">
+              {{ vendor.phone || "-" }}
+            </td>
+            <td class="whitespace-nowrap font-bold text-right">
+              ${{ Number(vendor.balance).toFixed(2) }}
+            </td>
             <td class="whitespace-nowrap text-right">
               <div class="flex justify-end gap-2">
                 <RouterLink
@@ -121,15 +140,34 @@
       </table>
 
       <!-- Pagination -->
-      <div v-if="totalPages > 1" class="px-6 py-4 flex items-center justify-between border-t border-divider">
+      <div
+        v-if="totalPages > 1"
+        class="px-6 py-4 flex items-center justify-between border-t border-divider"
+      >
         <div class="flex-1 flex justify-between sm:hidden">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="btn-secondary py-1 px-4">Previous</button>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="btn-secondary py-1 px-4">Next</button>
+          <button
+            @click="changePage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="btn-secondary py-1 px-4"
+          >
+            Previous
+          </button>
+          <button
+            @click="changePage(currentPage + 1)"
+            :disabled="currentPage === totalPages"
+            class="btn-secondary py-1 px-4"
+          >
+            Next
+          </button>
         </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+        >
           <div>
             <p class="text-sm text-muted">
-              Showing page <span class="font-bold text-on-surface">{{ currentPage }}</span> of <span class="font-bold text-on-surface">{{ totalPages }}</span>
+              Showing page
+              <span class="font-bold text-on-surface">{{ currentPage }}</span>
+              of <span class="font-bold text-on-surface">{{ totalPages }}</span>
             </p>
           </div>
           <div>
@@ -139,7 +177,11 @@
                 :key="p"
                 @click="changePage(p)"
                 class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold transition-colors"
-                :class="p === currentPage ? 'bg-primary text-white' : 'text-muted hover:bg-primary/8'"
+                :class="
+                  p === currentPage
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:bg-primary/8'
+                "
               >
                 {{ p }}
               </button>
@@ -152,10 +194,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import vendorService from '../../services/vendorService';
-import BulkImportModal from '../../components/BulkImportModal.vue';
+import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import vendorService from "../../services/vendorService";
+import BulkImportModal from "../../components/BulkImportModal.vue";
 
 const router = useRouter();
 
@@ -173,8 +215,8 @@ const closeMoreMenu = () => {
   showMoreMenu.value = false;
 };
 const filters = reactive({
-  name: '',
-  email: '',
+  name: "",
+  email: "",
 });
 
 const editVendor = (id) => {
@@ -193,7 +235,7 @@ const fetchVendors = async () => {
     totalPages.value = response.data.pages;
     currentPage.value = response.data.current_page;
   } catch (error) {
-    console.error('Failed to fetch vendors:', error);
+    console.error("Failed to fetch vendors:", error);
   }
 };
 
@@ -214,8 +256,11 @@ const confirmDelete = async (vendor) => {
       await vendorService.deleteVendor(vendor.id);
       fetchVendors();
     } catch (error) {
-      console.error('Failed to delete vendor:', error);
-      const message = error.response?.data?.message || error.response?.data?.msg || 'Failed to delete vendor.';
+      console.error("Failed to delete vendor:", error);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "Failed to delete vendor.";
       alert(message);
     }
   }
@@ -223,10 +268,10 @@ const confirmDelete = async (vendor) => {
 
 onMounted(() => {
   fetchVendors();
-  window.addEventListener('click', closeMoreMenu);
+  window.addEventListener("click", closeMoreMenu);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', closeMoreMenu);
+  window.removeEventListener("click", closeMoreMenu);
 });
 </script>

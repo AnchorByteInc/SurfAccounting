@@ -1,31 +1,35 @@
-import api from './api';
+import api from "./api";
 
 export const reportService = {
   getIncomeStatement(startDate, endDate) {
-    return api.get(`/reports/income-statement?start_date=${startDate}&end_date=${endDate}`);
+    return api.get(
+      `/reports/income-statement?start_date=${startDate}&end_date=${endDate}`,
+    );
   },
 
   getBalanceSheet(asOfDate) {
-    const params = asOfDate ? `?as_of_date=${asOfDate}` : '';
+    const params = asOfDate ? `?as_of_date=${asOfDate}` : "";
     return api.get(`/reports/balance-sheet${params}`);
   },
 
   getCashFlow(startDate, endDate) {
-    return api.get(`/reports/cash-flow?start_date=${startDate}&end_date=${endDate}`);
+    return api.get(
+      `/reports/cash-flow?start_date=${startDate}&end_date=${endDate}`,
+    );
   },
 
   getARAging(asOfDate) {
-    const params = asOfDate ? `?as_of_date=${asOfDate}` : '';
+    const params = asOfDate ? `?as_of_date=${asOfDate}` : "";
     return api.get(`/reports/ar-aging${params}`);
   },
 
   getAPAging(asOfDate) {
-    const params = asOfDate ? `?as_of_date=${asOfDate}` : '';
+    const params = asOfDate ? `?as_of_date=${asOfDate}` : "";
     return api.get(`/reports/ap-aging${params}`);
   },
 
   getIntegrityCheck() {
-    return api.get('/reports/integrity-check');
+    return api.get("/reports/integrity-check");
   },
 
   exportToPDF(elementId, filename) {
@@ -36,5 +40,5 @@ export const reportService = {
     document.title = filename;
     window.print();
     document.title = originalTitle;
-  }
+  },
 };

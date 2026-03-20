@@ -3,7 +3,7 @@ from backend.app import create_app
 from backend.config import Config
 from backend.extensions import db
 from backend.models.vendor import Vendor
-from backend.models.bill import Bill, BillLine
+from backend.models.bill import Bill
 from backend.models.account import Account
 from backend.models.settings import Settings
 from datetime import date, timedelta

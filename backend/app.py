@@ -50,9 +50,6 @@ def create_app(config_class=Config):
         except (NoAuthorizationError, InvalidHeaderError, JWTDecodeError, WrongTokenError, pyjwt.exceptions.PyJWTError) as e:
             return jsonify({"msg": str(e)}), 401
 
-    # Import models to ensure they are registered with SQLAlchemy
-    from . import models
-
     # Register blueprints
     from .auth import auth_bp
     from .customers import customers_bp

@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 import sys
 import os
-from sqlalchemy import create_engine, MetaData, text, inspect
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, text, inspect
 
 # Ensure project root is in sys.path
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from backend.app import create_app
-from backend.extensions import db
-# Import all models to register them in metadata
-from backend.models import *
+from backend.app import create_app  # noqa: E402
+from backend.extensions import db  # noqa: E402
 
 def migrate_data():
     """
@@ -97,7 +94,7 @@ def migrate_data():
                                        COALESCE((SELECT MAX(id) FROM {table.name}), 0) + 1, 
                                        false);
                             """))
-                        except Exception as e:
+                        except Exception:
                             # If it's not a serial column or sequence doesn't exist, just skip
                             pass
 

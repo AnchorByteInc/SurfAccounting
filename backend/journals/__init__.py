@@ -250,8 +250,8 @@ def bulk_import_journals():
                 
                 # Check balance
                 if not new_entry.is_balanced():
-                    debits = sum(to_decimal(l.debit or 0) for l in new_entry.lines)
-                    credits = sum(to_decimal(l.credit or 0) for l in new_entry.lines)
+                    debits = sum(to_decimal(line.debit or 0) for line in new_entry.lines)
+                    credits = sum(to_decimal(line.credit or 0) for line in new_entry.lines)
                     raise ValueError(f"Journal entry {data['reference']} is not balanced (D:{debits} C:{credits})")
                 
                 db.session.add(new_entry)

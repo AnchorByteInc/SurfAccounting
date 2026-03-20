@@ -23,7 +23,7 @@ def build_index():
     model = get_model()
     
     with get_db_session() as session:
-        accounts = session.query(Account).filter(Account.is_active == True).all()
+        accounts = session.query(Account).filter(Account.is_active).all()
         # Extract IDs to avoid session-bound object issues later
         account_ids = [acc.id for acc in accounts]
         

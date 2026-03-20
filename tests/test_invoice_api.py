@@ -3,7 +3,7 @@ from backend.app import create_app
 from backend.config import Config
 from backend.extensions import db
 from backend.models.customer import Customer
-from backend.models.invoice import Invoice, InvoiceLine
+from backend.models.invoice import Invoice
 from backend.models.account import Account
 from backend.models.tax import Tax
 from backend.models.settings import Settings

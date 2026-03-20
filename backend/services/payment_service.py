@@ -6,10 +6,9 @@ from ..models.journal import JournalEntry, JournalEntryLine
 from ..models.account import Account
 from ..models.bank import BankAccount
 from ..services.invoice_service import update_customer_balance
-from ..services.bill_service import update_vendor_balance, sync_bill_gl
+from ..services.bill_service import update_vendor_balance
 from ..utils.validation import validate_date_is_open, validate_positive_amount
 from ..utils.ledger import get_account_balance
-from datetime import date
 from decimal import Decimal
 from ..utils.money import to_decimal, zero
 

@@ -6,10 +6,10 @@ root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from backend.app import create_app
-from backend.extensions import db
-from backend.models.account import Account
-from backend.models.user import User
+from backend.app import create_app  # noqa: E402
+from backend.extensions import db  # noqa: E402
+from backend.models.account import Account  # noqa: E402
+from backend.models.user import User  # noqa: E402
 
 def seed_data(app=None):
     if app is None:

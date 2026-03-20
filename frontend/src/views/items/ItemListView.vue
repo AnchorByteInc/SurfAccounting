@@ -18,12 +18,15 @@
           >
             <span class="material-icons">more_vert</span>
           </button>
-          <div 
+          <div
             v-if="showMoreMenu"
             class="absolute right-0 mt-1 w-48 bg-white rounded-[14px] shadow-lg border border-gray-100 py-1 z-50"
           >
-            <button 
-              @click="showImportModal = true; showMoreMenu = false"
+            <button
+              @click="
+                showImportModal = true;
+                showMoreMenu = false;
+              "
               class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary/5 flex items-center gap-2"
             >
               <span class="material-icons text-[18px]">upload_file</span>
@@ -34,11 +37,19 @@
       </div>
     </Teleport>
 
-    <BulkImportModal 
+    <BulkImportModal
       :is-open="showImportModal"
       title="Bulk Import Products & Services"
       upload-url="/items/bulk-import"
-      :template-fields="['name', 'description', 'price', 'sellable', 'income_account_code', 'purchaseable', 'expense_account_code']"
+      :template-fields="[
+        'name',
+        'description',
+        'price',
+        'sellable',
+        'income_account_code',
+        'purchaseable',
+        'expense_account_code',
+      ]"
       @close="showImportModal = false"
       @success="fetchItems"
     />
@@ -57,11 +68,21 @@
       </div>
       <div class="flex items-end pb-1 gap-4">
         <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" v-model="filters.sellable" @change="handleFilter" class="form-checkbox" />
+          <input
+            type="checkbox"
+            v-model="filters.sellable"
+            @change="handleFilter"
+            class="form-checkbox"
+          />
           <span class="text-sm font-medium">Sellable</span>
         </label>
         <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" v-model="filters.purchaseable" @change="handleFilter" class="form-checkbox" />
+          <input
+            type="checkbox"
+            v-model="filters.purchaseable"
+            @change="handleFilter"
+            class="form-checkbox"
+          />
           <span class="text-sm font-medium">Purchaseable</span>
         </label>
       </div>
@@ -80,18 +101,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="item in items" 
+          <tr
+            v-for="item in items"
             :key="item.id"
             @click="editItem(item.id)"
             class="cursor-pointer hover:bg-primary/8"
           >
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ item.name }}</td>
-            <td class="truncate max-w-xs text-muted">{{ item.description || '-' }}</td>
-            <td class="whitespace-nowrap text-right">${{ Number(item.price).toFixed(2) }}</td>
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ item.name }}
+            </td>
+            <td class="truncate max-w-xs text-muted">
+              {{ item.description || "-" }}
+            </td>
+            <td class="whitespace-nowrap text-right">
+              ${{ Number(item.price).toFixed(2) }}
+            </td>
             <td class="whitespace-nowrap">
-              <span v-if="item.sellable" class="badge-success mr-1">Sellable</span>
-              <span v-if="item.purchaseable" class="badge-info">Purchaseable</span>
+              <span v-if="item.sellable" class="badge-success mr-1"
+                >Sellable</span
+              >
+              <span v-if="item.purchaseable" class="badge-info"
+                >Purchaseable</span
+              >
             </td>
             <td class="whitespace-nowrap text-right">
               <div class="flex justify-end gap-2">
@@ -122,15 +153,34 @@
       </table>
 
       <!-- Pagination -->
-      <div v-if="totalPages > 1" class="px-6 py-4 flex items-center justify-between border-t border-divider">
+      <div
+        v-if="totalPages > 1"
+        class="px-6 py-4 flex items-center justify-between border-t border-divider"
+      >
         <div class="flex-1 flex justify-between sm:hidden">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="btn-secondary py-1 px-4">Previous</button>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="btn-secondary py-1 px-4">Next</button>
+          <button
+            @click="changePage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="btn-secondary py-1 px-4"
+          >
+            Previous
+          </button>
+          <button
+            @click="changePage(currentPage + 1)"
+            :disabled="currentPage === totalPages"
+            class="btn-secondary py-1 px-4"
+          >
+            Next
+          </button>
         </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+        >
           <div>
             <p class="text-sm text-muted">
-              Showing page <span class="font-bold text-on-surface">{{ currentPage }}</span> of <span class="font-bold text-on-surface">{{ totalPages }}</span>
+              Showing page
+              <span class="font-bold text-on-surface">{{ currentPage }}</span>
+              of <span class="font-bold text-on-surface">{{ totalPages }}</span>
             </p>
           </div>
           <div>
@@ -140,7 +190,11 @@
                 :key="p"
                 @click="changePage(p)"
                 class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold transition-colors"
-                :class="p === currentPage ? 'bg-primary text-white' : 'text-muted hover:bg-primary/8'"
+                :class="
+                  p === currentPage
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:bg-primary/8'
+                "
               >
                 {{ p }}
               </button>
@@ -153,10 +207,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import itemService from '../../services/itemService';
-import BulkImportModal from '../../components/BulkImportModal.vue';
+import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import itemService from "../../services/itemService";
+import BulkImportModal from "../../components/BulkImportModal.vue";
 
 const router = useRouter();
 
@@ -174,7 +228,7 @@ const closeMoreMenu = () => {
   showMoreMenu.value = false;
 };
 const filters = reactive({
-  name: '',
+  name: "",
   sellable: false,
   purchaseable: false,
 });
@@ -198,7 +252,7 @@ const fetchItems = async () => {
     totalPages.value = response.data.pages;
     currentPage.value = response.data.current_page;
   } catch (error) {
-    console.error('Failed to fetch items:', error);
+    console.error("Failed to fetch items:", error);
   }
 };
 
@@ -219,8 +273,11 @@ const confirmDelete = async (item) => {
       await itemService.deleteItem(item.id);
       fetchItems();
     } catch (error) {
-      console.error('Failed to delete item:', error);
-      const message = error.response?.data?.message || error.response?.data?.msg || 'Failed to delete item.';
+      console.error("Failed to delete item:", error);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "Failed to delete item.";
       alert(message);
     }
   }
@@ -228,10 +285,10 @@ const confirmDelete = async (item) => {
 
 onMounted(() => {
   fetchItems();
-  window.addEventListener('click', closeMoreMenu);
+  window.addEventListener("click", closeMoreMenu);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', closeMoreMenu);
+  window.removeEventListener("click", closeMoreMenu);
 });
 </script>

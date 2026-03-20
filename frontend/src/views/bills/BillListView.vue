@@ -76,23 +76,32 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="bill in bills" 
+          <tr
+            v-for="bill in bills"
             :key="bill.id"
             @click="editBill(bill.id)"
             class="cursor-pointer hover:bg-primary/8"
           >
-            <td class="whitespace-nowrap font-medium text-on-surface">{{ bill.bill_number }}</td>
-            <td class="whitespace-nowrap text-muted">{{ bill.vendor ? bill.vendor.name : 'N/A' }}</td>
+            <td class="whitespace-nowrap font-medium text-on-surface">
+              {{ bill.bill_number }}
+            </td>
+            <td class="whitespace-nowrap text-muted">
+              {{ bill.vendor ? bill.vendor.name : "N/A" }}
+            </td>
             <td class="whitespace-nowrap text-muted">{{ bill.issue_date }}</td>
             <td class="whitespace-nowrap text-muted">{{ bill.due_date }}</td>
-            <td class="whitespace-nowrap font-bold text-right text-on-surface">${{ Number(bill.total).toFixed(2) }}</td>
-            <td class="whitespace-nowrap font-bold text-right text-on-surface">${{ Number(bill.balance).toFixed(2) }}</td>
+            <td class="whitespace-nowrap font-bold text-right text-on-surface">
+              ${{ Number(bill.total).toFixed(2) }}
+            </td>
+            <td class="whitespace-nowrap font-bold text-right text-on-surface">
+              ${{ Number(bill.balance).toFixed(2) }}
+            </td>
             <td class="whitespace-nowrap">
               <span
                 :class="[
                   'badge',
-                  statusBadgeClasses[bill.status] || 'bg-gray-100 text-gray-800'
+                  statusBadgeClasses[bill.status] ||
+                    'bg-gray-100 text-gray-800',
                 ]"
               >
                 {{ bill.status }}
@@ -135,15 +144,34 @@
       </table>
 
       <!-- Pagination -->
-      <div v-if="totalPages > 1" class="px-6 py-4 flex items-center justify-between border-t border-divider">
+      <div
+        v-if="totalPages > 1"
+        class="px-6 py-4 flex items-center justify-between border-t border-divider"
+      >
         <div class="flex-1 flex justify-between sm:hidden">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="btn-secondary py-1 px-4">Previous</button>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="btn-secondary py-1 px-4">Next</button>
+          <button
+            @click="changePage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="btn-secondary py-1 px-4"
+          >
+            Previous
+          </button>
+          <button
+            @click="changePage(currentPage + 1)"
+            :disabled="currentPage === totalPages"
+            class="btn-secondary py-1 px-4"
+          >
+            Next
+          </button>
         </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+        >
           <div>
             <p class="text-sm text-muted">
-              Showing page <span class="font-bold text-on-surface">{{ currentPage }}</span> of <span class="font-bold text-on-surface">{{ totalPages }}</span>
+              Showing page
+              <span class="font-bold text-on-surface">{{ currentPage }}</span>
+              of <span class="font-bold text-on-surface">{{ totalPages }}</span>
             </p>
           </div>
           <div>
@@ -153,7 +181,11 @@
                 :key="p"
                 @click="changePage(p)"
                 class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold transition-colors"
-                :class="p === currentPage ? 'bg-primary text-white' : 'text-muted hover:bg-primary/8'"
+                :class="
+                  p === currentPage
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:bg-primary/8'
+                "
               >
                 {{ p }}
               </button>
@@ -172,19 +204,19 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import billService from '../../services/billService';
-import VendorPaymentModal from '../../components/VendorPaymentModal.vue';
+import { ref, reactive, onMounted } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import billService from "../../services/billService";
+import VendorPaymentModal from "../../components/VendorPaymentModal.vue";
 
 const bills = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(1);
 const filters = reactive({
-  bill_number: '',
-  status: '',
-  start_date: '',
-  end_date: '',
+  bill_number: "",
+  status: "",
+  start_date: "",
+  end_date: "",
 });
 
 const router = useRouter();
@@ -198,11 +230,11 @@ const openPaymentModal = (bill) => {
 };
 
 const statusBadgeClasses = {
-  'draft': 'bg-gray-100 text-gray-800',
-  'approved': 'bg-blue-100 text-blue-800',
-  'paid': 'bg-green-100 text-green-800',
-  'overdue': 'badge-primary',
-  'cancelled': 'btn-error text-[10px] px-2 py-1',
+  draft: "bg-gray-100 text-gray-800",
+  approved: "bg-blue-100 text-blue-800",
+  paid: "bg-green-100 text-green-800",
+  overdue: "badge-primary",
+  cancelled: "btn-error text-[10px] px-2 py-1",
 };
 
 const fetchBills = async () => {
@@ -210,13 +242,13 @@ const fetchBills = async () => {
     const response = await billService.getBills({
       page: currentPage.value,
       per_page: 10,
-      ...filters
+      ...filters,
     });
     bills.value = response.data.bills;
     totalPages.value = response.data.pages;
     currentPage.value = response.data.current_page;
   } catch (error) {
-    console.error('Failed to fetch bills:', error);
+    console.error("Failed to fetch bills:", error);
   }
 };
 
@@ -241,8 +273,11 @@ const confirmDelete = async (bill) => {
       await billService.deleteBill(bill.id);
       fetchBills();
     } catch (error) {
-      console.error('Failed to delete bill:', error);
-      const message = error.response?.data?.message || error.response?.data?.msg || 'Failed to delete bill.';
+      console.error("Failed to delete bill:", error);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "Failed to delete bill.";
       alert(message);
     }
   }

@@ -1,4 +1,3 @@
-import pytest
 from backend.app import create_app
 from backend.config import Config
 from backend.extensions import db

@@ -1,7 +1,7 @@
 from sqlalchemy import event
 from ..extensions import db
 from .base import BaseModel
-from ..utils.money import to_decimal, zero
+from ..utils.money import to_decimal
 
 class JournalEntry(db.Model, BaseModel):
     __tablename__ = 'journal_entries'

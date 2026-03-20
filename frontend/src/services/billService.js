@@ -1,14 +1,14 @@
-import api from './api';
+import api from "./api";
 
 export default {
   getBills(params) {
-    return api.get('/bills', { params });
+    return api.get("/bills", { params });
   },
   getBill(id) {
     return api.get(`/bills/${id}`);
   },
   createBill(data) {
-    return api.post('/bills', data);
+    return api.post("/bills", data);
   },
   updateBill(id, data) {
     return api.put(`/bills/${id}`, data);
@@ -21,13 +21,13 @@ export default {
   },
   // Bill lines
   getBillLines(params) {
-    return api.get('/bill_lines', { params });
+    return api.get("/bill_lines", { params });
   },
   getBillLine(id) {
     return api.get(`/bill_lines/${id}`);
   },
   createBillLine(data) {
-    return api.post('/bill_lines', data);
+    return api.post("/bill_lines", data);
   },
   updateBillLine(id, data) {
     return api.put(`/bill_lines/${id}`, data);
@@ -37,9 +37,9 @@ export default {
   },
   // Vendor Payments
   getVendorPayments(params) {
-    return api.get('/vendor_payments', { params });
+    return api.get("/vendor_payments", { params });
   },
   createVendorPayment(data) {
-    return api.post('/vendor_payments', data);
-  }
+    return api.post("/vendor_payments", data);
+  },
 };

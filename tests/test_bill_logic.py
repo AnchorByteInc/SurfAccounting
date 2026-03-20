@@ -7,7 +7,7 @@ from backend.extensions import db
 from backend.models.account import Account
 from backend.models.vendor import Vendor
 from backend.models.bill import Bill, BillLine
-from backend.models.journal import JournalEntry, JournalEntryLine
+from backend.models.journal import JournalEntry
 from backend.services.bill_service import post_bill
 
 class TestConfig(Config):
@@ -147,8 +147,8 @@ def test_post_bill(app):
         # Debit: Expense (1000.00)
         # Credit: AP (1000.00)
         
-        ap_line = [l for l in journal_entry.lines if l.account_id == ap_account.id][0]
-        exp_line = [l for l in journal_entry.lines if l.account_id == expense_account.id][0]
+        ap_line = [line for line in journal_entry.lines if line.account_id == ap_account.id][0]
+        exp_line = [line for line in journal_entry.lines if line.account_id == expense_account.id][0]
         
         assert ap_line.debit == Decimal('0.00')
         assert ap_line.credit == Decimal('1000.00')
