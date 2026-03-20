@@ -35,18 +35,22 @@ describe("InvoiceFormView.vue", () => {
     { id: 1, code: "4000", name: "Sales" },
     { id: 2, code: "4001", name: "Other Revenue" },
   ];
-  const mockTaxes = [
-    { id: 1, name: "VAT", rate: "0.1" },
-  ];
+  const mockTaxes = [{ id: 1, name: "VAT", rate: "0.1" }];
   const mockItems = [
-    { id: 1, name: "Test Item", price: "100", income_account_id: 1, sales_taxes: [{id: 1}] },
+    {
+      id: 1,
+      name: "Test Item",
+      price: "100",
+      income_account_id: 1,
+      sales_taxes: [{ id: 1 }],
+    },
   ];
 
   beforeEach(() => {
     // Create a teleport target
-    const el = document.createElement('div')
-    el.id = 'navbar-actions'
-    document.body.appendChild(el)
+    const el = document.createElement("div");
+    el.id = "navbar-actions";
+    document.body.appendChild(el);
 
     vi.resetAllMocks();
     customerService.getCustomers.mockResolvedValue({
@@ -64,11 +68,11 @@ describe("InvoiceFormView.vue", () => {
   });
 
   afterEach(() => {
-    const el = document.getElementById('navbar-actions')
+    const el = document.getElementById("navbar-actions");
     if (el) {
-      document.body.removeChild(el)
+      document.body.removeChild(el);
     }
-  })
+  });
 
   it("should render the form with initial values", async () => {
     const wrapper = mount(InvoiceFormView, {
@@ -97,9 +101,9 @@ describe("InvoiceFormView.vue", () => {
 
     await qtyInput.setValue(2);
     await priceInput.setValue(100);
-    
+
     // Select an item that has tax
-    const itemSelect = wrapper.find('table select');
+    const itemSelect = wrapper.find("table select");
     await itemSelect.setValue(1);
     await flushPromises();
 

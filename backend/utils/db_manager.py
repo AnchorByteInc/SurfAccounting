@@ -12,15 +12,14 @@ from backend.extensions import db  # noqa: E402
 from backend.seed import seed_data  # noqa: E402
 from backend.models.settings import Settings  # noqa: E402
 from backend.models.accounting_period import AccountingPeriod  # noqa: E402
+from flask_migrate import upgrade as flask_migrate_upgrade
 
 def reset_database(interactive=True):
     """
     Resets the database to an initial empty state.
     1. Drops all tables.
     2. Recreates all tables.
-    3. Seeds default chart of accounts.
-    4. Seeds default business settings.
-    5. Seeds current year accounting period.
+    3. Seeds default data.
     """
     if interactive:
         confirm = input("Are you sure you want to reset the database? ALL DATA WILL BE LOST! (y/N): ")
@@ -32,18 +31,26 @@ def reset_database(interactive=True):
     with app.app_context():
         print("Resetting database to initial state...")
         
-        # SQLite specifically: drop all tables might be blocked by foreign keys if not handled
-        # But drop_all() usually works fine with SQLite as long as there are no open transactions
         try:
             db.drop_all()
             print("All tables dropped.")
             
-            db.create_all()
-            print("Database schema recreated.")
+            # Using flask-migrate to upgrade the schema to the latest version
+            # This is better than db.create_all() because it also initializes the alembic_version table
+            flask_migrate_upgrade()
+            print("Database schema recreated via migrations.")
         except Exception as e:
             print(f"Error during schema reset: {e}")
             return
 
+        seed_only_logic(app)
+        print("Database reset complete.")
+
+def seed_only_logic(app):
+    """
+    Seeds the database with default data if not already present.
+    """
+    with app.app_context():
         # Seed Chart of Accounts
         print("Seeding default chart of accounts...")
         seed_data(app)
@@ -77,7 +84,9 @@ def reset_database(interactive=True):
             db.session.rollback()
             print(f"Error seeding data: {e}")
 
-        print("Database reset complete.")
+def seed_database():
+    app = create_app()
+    seed_only_logic(app)
 
 if __name__ == "__main__":
     # If "--force" or "-f" is passed, run non-interactively

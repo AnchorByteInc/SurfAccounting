@@ -3,13 +3,11 @@ set -e
 
 # Initialize/Migrate database
 echo "Initializing/Migrating database..."
-# Run reset_db.py if database doesn't exist, or just use migrations
-if [ ! -f "data.sqlite" ]; then
-    python3 scripts/reset_db.py --force
-fi
-
 # Apply migrations
 flask db upgrade
+
+# Seed default data if needed (safe, only seeds if empty)
+python3 scripts/seed_db.py
 
 # Start Nginx in background
 echo "Starting Nginx..."
