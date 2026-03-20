@@ -12,7 +12,7 @@ from backend.extensions import db  # noqa: E402
 from backend.seed import seed_data  # noqa: E402
 from backend.models.settings import Settings  # noqa: E402
 from backend.models.accounting_period import AccountingPeriod  # noqa: E402
-from flask_migrate import upgrade as flask_migrate_upgrade
+from flask_migrate import upgrade as flask_migrate_upgrade  # noqa: E402
 
 def reset_database(interactive=True):
     """
