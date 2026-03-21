@@ -127,9 +127,19 @@ def run_migrations_online():
 
             with context.begin_transaction():
                 context.run_migrations()
+            
+            # For SQLAlchemy 2.0, explicit commit is needed if not using connection.begin()
+            if hasattr(connection, 'commit'):
+                connection.commit()
+        except Exception as e:
+            logger.error(f"Error during migrations: {e}")
+            raise
         finally:
             if dialect_name == "postgresql":
-                connection.execute(sa.text("SELECT pg_advisory_unlock(827342)"))
+                try:
+                    connection.execute(sa.text("SELECT pg_advisory_unlock(827342)"))
+                except Exception as e:
+                    logger.warning(f"Error unlocking Postgres advisory lock: {e}")
             elif dialect_name == "mysql":
                 connection.execute(sa.text("SELECT RELEASE_LOCK('alembic_migration_lock')"))
 
