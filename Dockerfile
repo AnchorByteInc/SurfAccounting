@@ -18,7 +18,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     FLASK_APP=backend.app \
     UPLOAD_FOLDER=/app/uploads \
-    DATABASE_URL=sqlite:////app/data.sqlite
+    DATABASE_URL=sqlite:////app/data.sqlite \
+    HOME=/app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -53,8 +54,8 @@ RUN mkdir -p /app/uploads && \
 # Security: Adjust permissions for Nginx and App
 # In a slim image, we might need to adjust some paths for the nginx user
 RUN touch /var/run/nginx.pid && \
-    mkdir -p /var/cache/nginx /var/lib/nginx /var/log/nginx && \
-    chown -R www-data:www-data /var/run/nginx.pid /var/cache/nginx /var/lib/nginx /var/log/nginx /usr/share/nginx/html /app
+    mkdir -p /var/cache/nginx /var/lib/nginx /var/log/nginx /var/www && \
+    chown -R www-data:www-data /var/run/nginx.pid /var/cache/nginx /var/lib/nginx /var/log/nginx /usr/share/nginx/html /app /var/www
 
 # Switch to non-root user
 USER www-data
