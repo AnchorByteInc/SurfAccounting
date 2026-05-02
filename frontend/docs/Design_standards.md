@@ -25,7 +25,7 @@ The colors are derived from a custom implementation of Material Design 3 palette
 | :--------------- | :---------------------- | :------------------------------------------------------- |
 | **Primary**      | `#1A5F7A`               | Main brand color, primary actions, active indicators.    |
 | **Secondary**    | `#2D9596`               | Accent color, secondary actions, highlights.             |
-| **Error**        | `#BA191A`               | Destructive actions, error alerts, validation messages.  |
+| **Error**        | `#e63946`               | Destructive actions, error alerts, validation messages.  |
 | **Background**   | `#E0F4FF`               | Global page background.                                  |
 | **Surface/Card** | `#FDFDFD`               | Background for cards, modals, and container elements.    |
 | **On-Surface**   | `#0F4C61`               | Standard text color for surface backgrounds (Deep Wave). |
@@ -88,7 +88,7 @@ The colors are derived from a custom implementation of Material Design 3 palette
 
 - **Primary (Filled/Tonal)**: Teal/Blue background (`#1A5F7A`), white/light-grey text.
 - **Secondary**: Aqua background (`#2D9596`), white/light-grey text.
-- **Error (Danger)**: Red background (`#BA191A`) or red text for outlines.
+- **Error (Danger)**: Red background (`#e63946`) or red text for outlines.
 - **Pill-nav Button**: Transparent background with a `12px` blur filter (`backdrop-filter: blur(12px)`) and a subtle white/grey background color with low opacity.
 - **Universal Create Button**: A specific button pattern used for global actions, typically with a plus icon.
 

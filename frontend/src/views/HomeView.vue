@@ -33,7 +33,7 @@
           >
             Monthly Expenses
           </p>
-          <p class="text-2xl font-bold text-secondary">
+          <p class="text-2xl font-bold text-error">
             ${{ formatCurrency(metrics.expenses) }}
           </p>
         </div>
@@ -140,13 +140,48 @@ const chartOptions = {
   plugins: {
     legend: {
       position: "top",
+      labels: {
+        usePointStyle: true,
+        pointStyle: "circle",
+        padding: 20,
+        font: {
+          family: "'Helvetica', sans-serif",
+          weight: "bold",
+        },
+      },
+    },
+    tooltip: {
+      backgroundColor: "#0f4c61",
+      titleFont: { family: "'Helvetica', sans-serif" },
+      bodyFont: { family: "'Helvetica', sans-serif" },
+      cornerRadius: 10,
+      padding: 12,
     },
   },
   scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        font: {
+          family: "'Helvetica', sans-serif",
+        },
+      },
+    },
     y: {
       beginAtZero: true,
+      grid: {
+        color: "#f1f6f9",
+      },
       ticks: {
         callback: (value) => "$" + value.toLocaleString(),
+        font: {
+          family: "'Helvetica', sans-serif",
+        },
+      },
+      border: {
+        display: false,
       },
     },
   },
@@ -168,12 +203,16 @@ const fetchData = async () => {
     chartData.datasets = [
       {
         label: "Revenue",
-        backgroundColor: "#10B981", // green-500
+        backgroundColor: "#1a5f7a",
+        hoverBackgroundColor: "#0f4c61",
+        borderRadius: 6,
         data: monthly_data.map((d) => d.revenue),
       },
       {
         label: "Expenses",
-        backgroundColor: "#EF4444", // red-500
+        backgroundColor: "#e63946",
+        hoverBackgroundColor: "#cc2b37",
+        borderRadius: 6,
         data: monthly_data.map((d) => d.expenses),
       },
     ];
