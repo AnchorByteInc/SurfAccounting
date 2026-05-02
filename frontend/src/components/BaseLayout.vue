@@ -114,7 +114,7 @@
     </header>
 
     <div class="fixed flex left-0 mt-3 appear-on-scroll" style="z-index: 1000">
-      <div class="pill-nav hidden lg:flex items-center">
+      <div v-if="backPath" class="pill-nav hidden lg:flex items-center">
         <RouterLink
           :to="backPath"
           class="w-[40px] h-[40px] flex items-center justify-center rounded-full hover:bg-primary/8"
