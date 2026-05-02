@@ -98,7 +98,13 @@ const handleResetPassword = async () => {
 
       <!-- Bottom attribution on desktop -->
       <div class="absolute bottom-8 text-sm text-primary/60 hidden md:block">
-        &copy; 2026 <a href="https://anchorbyte.com" class="text-primary no-underline hover:underline">AnchorByte Software Innovations Inc.</a> All rights reserved.
+        &copy; 2026
+        <a
+          href="https://anchorbyte.com"
+          class="text-primary no-underline hover:underline"
+          >AnchorByte Software Innovations Inc.</a
+        >
+        All rights reserved.
       </div>
     </div>
 
