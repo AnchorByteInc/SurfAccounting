@@ -3,7 +3,7 @@ from ..models.invoice import Invoice
 from ..models.journal import JournalEntry, JournalEntryLine
 from ..models.account import Account
 from ..models.customer import Customer
-from ..utils.validation import validate_date_is_open, validate_positive_amount, validate_date_order
+from ..utils.validation import validate_date_is_open, validate_non_negative_amount, validate_date_order, validate_positive_amount
 from ..utils.money import to_decimal, zero
 
 def sync_invoice_journal(invoice, delete=False):
@@ -130,15 +130,12 @@ def post_invoice(invoice_id):
         
     for line in invoice.lines:
         validate_positive_amount(line.quantity, f"Line '{line.description}' quantity")
-        validate_positive_amount(line.unit_price, f"Line '{line.description}' unit price")
+        validate_non_negative_amount(line.unit_price, f"Line '{line.description}' unit price")
 
     validate_date_is_open(invoice.issue_date)
     
     # Ensure totals are up to date before posting
     invoice.calculate_totals()
-    
-    if invoice.total <= 0:
-        raise ValueError("Invoice total must be greater than zero.")
     
     if invoice.status != 'draft':
         raise ValueError(f"Invoice {invoice.invoice_number} is already posted or cancelled")

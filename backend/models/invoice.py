@@ -127,7 +127,7 @@ class InvoiceLine(db.Model, BaseModel):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=True)
     description = db.Column(db.String(255))
     quantity = db.Column(db.Numeric(precision=20, scale=2), default=1.0)
-    unit_price = db.Column(db.Numeric(precision=20, scale=2), default=0.0)
+    unit_price = db.Column(db.Numeric(precision=20, scale=2))
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
     line_total = db.Column(db.Numeric(precision=20, scale=2), default=0.0)
     
@@ -167,7 +167,7 @@ def before_flush(session, flush_context, instances):
                     if item:
                         if not obj.description:
                             obj.description = item.description
-                        if not obj.unit_price or obj.unit_price == 0:
+                        if obj.unit_price is None:
                             obj.unit_price = item.price
                         if not obj.account_id and item.income_account_id:
                             obj.account_id = item.income_account_id

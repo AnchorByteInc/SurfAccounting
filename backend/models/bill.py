@@ -124,7 +124,7 @@ class BillLine(db.Model, BaseModel):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=True)
     description = db.Column(db.String(255))
     quantity = db.Column(db.Numeric(precision=20, scale=2), default=1.0)
-    unit_cost = db.Column(db.Numeric(precision=20, scale=2), default=0.0)
+    unit_cost = db.Column(db.Numeric(precision=20, scale=2))
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False) # The expense/asset account
     line_total = db.Column(db.Numeric(precision=20, scale=2), default=0.0)
     
@@ -164,7 +164,7 @@ def before_flush(session, flush_context, instances):
                     if item:
                         if not obj.description:
                             obj.description = item.description
-                        if not obj.unit_cost or obj.unit_cost == 0:
+                        if obj.unit_cost is None:
                             obj.unit_cost = item.price
                         if not obj.account_id and item.expense_account_id:
                             obj.account_id = item.expense_account_id

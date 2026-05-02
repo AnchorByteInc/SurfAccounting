@@ -3,7 +3,7 @@ from ..models.bill import Bill
 from ..models.journal import JournalEntry, JournalEntryLine
 from ..models.account import Account
 from ..models.vendor import Vendor
-from ..utils.validation import validate_date_is_open, validate_positive_amount, validate_date_order
+from ..utils.validation import validate_date_is_open, validate_non_negative_amount, validate_date_order, validate_positive_amount
 from decimal import Decimal
 from ..utils.money import to_decimal, zero
 
@@ -26,7 +26,7 @@ def post_bill(bill_id):
         
     for line in bill.lines:
         validate_positive_amount(line.quantity, f"Line '{line.description}' quantity")
-        validate_positive_amount(line.unit_cost, f"Line '{line.description}' unit cost")
+        validate_non_negative_amount(line.unit_cost, f"Line '{line.description}' unit cost")
 
     validate_date_is_open(bill.issue_date)
     
