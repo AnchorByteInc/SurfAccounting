@@ -1,7 +1,7 @@
 from datetime import datetime
+from fastmcp.exceptions import ToolError
 from fastmcp.server.middleware import Middleware
 from fastmcp.server.dependencies import get_http_request
-from mcp.types import TextContent
 
 from mcp_server.utils.db import app as flask_app
 from backend.extensions import db
@@ -19,14 +19,14 @@ class ApiKeyAuthMiddleware(Middleware):
             api_key_header = None
 
         if not api_key_header:
-            return [TextContent(type="text", text="Error: Missing X-API-Key header. Provide a valid API key.")]
+            raise ToolError("Missing X-API-Key header. Provide a valid API key.")
 
         with flask_app.app_context():
             key_hash = ApiKey.hash_key(api_key_header)
             api_key = ApiKey.query.filter_by(key_hash=key_hash).first()
 
             if not api_key or not api_key.is_valid:
-                return [TextContent(type="text", text="Error: Invalid or expired API key.")]
+                raise ToolError("Invalid or expired API key.")
 
             api_key.last_used_at = datetime.utcnow()
             db.session.commit()
