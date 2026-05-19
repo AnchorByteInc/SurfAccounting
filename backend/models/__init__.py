@@ -13,6 +13,7 @@ from .settings import Settings
 from .accounting_period import AccountingPeriod
 from .tax import Tax, invoice_line_taxes, bill_line_taxes
 from .item import Item, item_taxes
+from .api_key import ApiKey
 
 __all__ = [
     'BaseModel',
@@ -38,5 +39,6 @@ __all__ = [
     'invoice_line_taxes',
     'bill_line_taxes',
     'Item',
-    'item_taxes'
+    'item_taxes',
+    'ApiKey'
 ]

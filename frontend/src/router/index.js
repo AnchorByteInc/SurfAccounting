@@ -236,6 +236,21 @@ const routes = [
             component: () => import("../views/settings/UserFormView.vue"),
             meta: { pageTitle: "Add New User", backPath: "/settings/users" },
           },
+          {
+            path: "api-keys",
+            name: "ApiKeyList",
+            component: () => import("../views/settings/ApiKeyListView.vue"),
+            meta: { pageTitle: "API Keys", backPath: "/settings" },
+          },
+          {
+            path: "api-keys/new",
+            name: "ApiKeyCreate",
+            component: () => import("../views/settings/ApiKeyFormView.vue"),
+            meta: {
+              pageTitle: "Create API Key",
+              backPath: "/settings/api-keys",
+            },
+          },
         ],
       },
     ],

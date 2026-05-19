@@ -1,5 +1,6 @@
 import os
-from flask import Flask, jsonify, request, send_from_directory
+from datetime import datetime
+from flask import Flask, jsonify, request, send_from_directory, g
 from sqlalchemy.exc import IntegrityError
 from .config import Config
 from .extensions import db, migrate, jwt, cors, ma
@@ -28,7 +29,7 @@ def create_app(config_class=Config):
     cors.init_app(app)
     ma.init_app(app)
 
-    # Global JWT protection
+    # Global JWT / API key protection
     @app.before_request
     def protect_routes():
         # List of public endpoints
@@ -44,7 +45,21 @@ def create_app(config_class=Config):
         # Check if the current endpoint is public or if it's an OPTIONS request (for CORS)
         if request.endpoint in public_endpoints or request.method == 'OPTIONS':
             return
-            
+
+        # Check for API key authentication (X-API-Key header)
+        api_key_header = request.headers.get('X-API-Key')
+        if api_key_header:
+            from .models.api_key import ApiKey
+            key_hash = ApiKey.hash_key(api_key_header)
+            api_key = ApiKey.query.filter_by(key_hash=key_hash).first()
+            if api_key and api_key.is_valid:
+                api_key.last_used_at = datetime.utcnow()
+                db.session.commit()
+                g.api_key_auth = True
+                g.api_key_user_id = api_key.created_by
+                return
+            return jsonify({"msg": "Invalid or expired API key"}), 401
+
         try:
             verify_jwt_in_request()
         except (NoAuthorizationError, InvalidHeaderError, JWTDecodeError, WrongTokenError, pyjwt.exceptions.PyJWTError) as e:
@@ -66,6 +81,7 @@ def create_app(config_class=Config):
     from .accounting_periods import accounting_periods_bp
     from .taxes import taxes_bp
     from .items import items_bp
+    from .api_keys import api_keys_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api')
     app.register_blueprint(customers_bp, url_prefix='/api')
@@ -82,6 +98,7 @@ def create_app(config_class=Config):
     app.register_blueprint(accounting_periods_bp, url_prefix='/api')
     app.register_blueprint(taxes_bp, url_prefix='/api')
     app.register_blueprint(items_bp, url_prefix='/api')
+    app.register_blueprint(api_keys_bp, url_prefix='/api')
 
     # Global Error Handlers (10.1.3)
     @app.errorhandler(ValueError)

@@ -111,6 +111,29 @@
           <span class="material-icons text-[18px]">arrow_forward</span>
         </RouterLink>
       </div>
+
+      <!-- API Keys -->
+      <div class="card card-hover flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+          >
+            <span class="material-icons">vpn_key</span>
+          </div>
+          <h3 class="m-0">API Keys</h3>
+        </div>
+        <p class="text-sm text-muted mb-6 flex-1">
+          Create and manage API keys for external integrations and the MCP
+          server.
+        </p>
+        <RouterLink
+          to="/settings/api-keys"
+          class="text-primary font-bold hover:opacity-80 flex items-center gap-1 mt-auto"
+        >
+          Manage API Keys
+          <span class="material-icons text-[18px]">arrow_forward</span>
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>

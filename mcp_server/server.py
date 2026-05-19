@@ -74,6 +74,14 @@ async def server_card(request: Request) -> JSONResponse:
             {
                 "type": "streamable-http",
                 "url": f"{base_url}/mcp",
+                "headers": [
+                    {
+                        "name": "X-API-Key",
+                        "description": "Surf Accounting API Key",
+                        "isRequired": True,
+                        "isSecret": True
+                    },
+                ]
             }
         ],
         "tools": tools_list,
