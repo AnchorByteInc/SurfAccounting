@@ -20,16 +20,6 @@ import mcp_server.tools.items  # noqa: E402, F401
 import mcp_server.tools.payments  # noqa: E402, F401
 import mcp_server.tools.vendors  # noqa: E402, F401
 
-# Path to the logo asset
-LOGO_PATH = os.path.join(
-    os.path.dirname(__file__), '..', 'frontend', 'src', 'assets', 'logo.svg'
-)
-
-
-@mcp.custom_route("/assets/logo.svg", methods=["GET"])
-async def get_logo(request: Request) -> FileResponse:
-    return FileResponse(LOGO_PATH, media_type="image/svg+xml")
-
 
 @mcp.custom_route("/.well-known/mcp/server-card.json", methods=["GET"])
 async def server_card(request: Request) -> JSONResponse:
@@ -66,7 +56,7 @@ async def server_card(request: Request) -> JSONResponse:
         "version": version,
         "icons": [
             {
-                "src": f"{base_url}/assets/logo.svg",
+                "src": f"{base_url}/logo.svg",
                 "mimeType": "image/svg+xml",
             }
         ],
