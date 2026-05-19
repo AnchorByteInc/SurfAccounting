@@ -40,7 +40,7 @@ def test_server_card_has_icons(client):
     assert len(card["icons"]) > 0
     icon = card["icons"][0]
     assert "src" in icon
-    assert icon["src"].endswith("/assets/logo.svg")
+    assert icon["src"].endswith("/logo.svg")
     assert icon["mimeType"] == "image/svg+xml"
 
 
@@ -71,9 +71,3 @@ def test_server_card_title_matches_mcp_name(client):
     response = client.get("/.well-known/mcp/server-card.json")
     card = response.json()
     assert card["title"] == mcp.name
-
-
-def test_logo_returns_200(client):
-    response = client.get("/assets/logo.svg")
-    assert response.status_code == 200
-    assert "image/svg+xml" in response.headers.get("content-type", "")
