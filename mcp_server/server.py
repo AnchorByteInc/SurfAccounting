@@ -8,7 +8,7 @@ if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
 from starlette.requests import Request  # noqa: E402
-from starlette.responses import JSONResponse, FileResponse  # noqa: E402
+from starlette.responses import JSONResponse  # noqa: E402
 from mcp_server.instance import mcp  # noqa: E402
 # Import tools to register them
 import mcp_server.tools.health  # noqa: E402, F401
