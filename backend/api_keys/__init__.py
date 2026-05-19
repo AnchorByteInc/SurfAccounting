@@ -21,11 +21,22 @@ def create_api_key():
         return jsonify({"message": "Name is required"}), 400
 
     current_username = get_jwt_identity()
-    print("current_username", current_username)
     current_user = User.query.filter_by(username=current_username).first()
-    print("current_user", current_user)
+
+    # Handle bootstrap scenario: JWT is valid but no User row exists yet
     if not current_user:
-        return jsonify({"message": "User not found"}), 401
+        if User.query.count() == 0:
+            current_user = User(
+                username=current_username,
+                email=f"{current_username}@localhost",
+                is_admin=True,
+                is_active=True,
+            )
+            current_user.set_password("")  # placeholder; bootstrap user
+            db.session.add(current_user)
+            db.session.flush()
+        else:
+            return jsonify({"message": "User not found"}), 401
 
     expires_at = None
     if data.get('expires_at'):
